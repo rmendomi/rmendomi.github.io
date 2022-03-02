@@ -7008,7 +7008,8 @@
                         "content": {
                             "*/*": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/PG_FlashCustomError"
+                                    "$ref": "#/components/schemas/PG_FlashCusto
+mError"
                                 }
                             }
                         }
