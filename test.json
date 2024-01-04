@@ -595,9 +595,6 @@
 					"slaHoursWithdrawal": {
 						"format": "int32",
 						"type": "integer"
-					},
-					"accountBranch": {
-						"type": "string"
 					}
 				}
 			},
@@ -1053,9 +1050,6 @@
 						"type": "integer"
 					},
 					"accountCurrency": {
-						"type": "string"
-					},
-					"accountBranch": {
 						"type": "string"
 					}
 				}
@@ -2835,9 +2829,6 @@
 					"slaHoursWithdrawal": {
 						"format": "int32",
 						"type": "integer"
-					},
-					"accountBranch": {
-						"type": "string"
 					}
 				}
 			},
@@ -5068,9 +5059,6 @@
 						"type": "string"
 					},
 					"currencyCode": {
-						"type": "string"
-					},
-					"accountBranch": {
 						"type": "string"
 					}
 				}
