@@ -1,5789 +1,1057 @@
-{
-	"security": [
-		{
-			"Customer-Authorization": [],
-			"Admin-Authorization": []
-		}
-	],
-	"components": {
-		"schemas": {
-			"PG_CreateAccountData": {
-				"type": "object",
-				"properties": {
-					"countryCode": {
-						"type": "string"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"isCompany": {
-						"type": "boolean"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"branch": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_GMoneyMasterChannelsData": {
-				"type": "object",
-				"properties": {
-					"bankAccount": {
-						"type": "string"
-					},
-					"hexColor": {
-						"type": "string"
-					},
-					"configs": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_GMoneyMasterConfigsData"
-						}
-					},
-					"code": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"isBank": {
-						"type": "boolean"
-					},
-					"name": {
-						"type": "string"
-					},
-					"log2": {
-						"type": "string"
-					},
-					"textColor": {
-						"type": "string"
-					},
-					"log1": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CashiersCheck": {
-				"type": "object",
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_AccountMassPaymentBeneficiar": {
-				"type": "object",
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"code": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"success": {
-						"type": "boolean"
-					},
-					"partnerId": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"transactionId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_Balance": {
-				"type": "object",
-				"properties": {
-					"totalBalance": {
-						"type": "number"
-					},
-					"lockedBalance": {
-						"type": "number"
-					},
-					"currencySymbol": {
-						"type": "string"
-					},
-					"currency": {
-						"type": "string"
-					},
-					"availableBalance": {
-						"type": "number"
-					}
-				}
-			},
-			"PG_LimitDto": {
-				"type": "object",
-				"required": [
-					"accountGroupId",
-					"limitType",
-					"lowerLimitUsd",
-					"operation",
-					"upperLimitUsd"
-				],
-				"properties": {
-					"accountGroupId": {
-						"format": "int32",
-						"description": "Account Group Id which Limit is defined.",
-						"type": "integer"
-					},
-					"lowerLimitUsd": {
-						"description": "Lower limit amount being defined.",
-						"type": "number",
-						"example": 10.0
-					},
-					"days": {
-						"format": "int32",
-						"description": "Number of days defined for the Limit.",
-						"type": "integer"
-					},
-					"upperLimitUsd": {
-						"description": "Upper limit amount being defined.",
-						"type": "number",
-						"example": 10.0
-					},
-					"priority": {
-						"description": "Priority defined for the Limit.",
-						"type": "string",
-						"enum": [
-							"NO_PRIORITY",
-							"LOW_PRIORITY",
-							"MEDIUM_PRIORITY",
-							"HIGH_PRIORITY",
-							"URGENT_PRIORITY"
-						],
-						"example": "10.0"
-					},
-					"operation": {
-						"description": "Operation type which Limit is defined.",
-						"type": "string",
-						"enum": [
-							"P2P_PAYMENT_IN",
-							"P2P_PAYMENT_OUT",
-							"P2P_CHARGE_IN",
-							"P2P_CHARGE_OUT",
-							"CASH_IN",
-							"CASH_OUT",
-							"REMITTANCE_IN",
-							"REMITTANCE_OUT",
-							"EXCHANGE_IN",
-							"FEE",
-							"REMITTENCE"
-						],
-						"example": "true"
-					},
-					"limitType": {
-						"description": "Limit type which Limit is defined.",
-						"type": "string",
-						"enum": [
-							"DAILY",
-							"WEEKLY",
-							"MONTHLY",
-							"YEARLY",
-							"BY_TRANSACTION",
-							"MONTHLY_BY_BALANCE",
-							"MONTHLY_BY_SUM_TRANSACTIONS",
-							"BY_DAYS",
-							"ACCOUNT_MIGRATION",
-							"REMITTENCE",
-							"GENERAL_TRANSACTION_LIMIT"
-						],
-						"example": "true"
-					}
-				}
-			},
-			"PG_HasActiveCardsResponse": {
-				"type": "object",
-				"properties": {
-					"activeCards": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_ActiveCardsResponse"
-						}
-					}
-				}
-			},
-			"PG_MainAccountDto": {
-				"type": "object",
-				"properties": {
-					"hasAccount": {
-						"type": "boolean"
-					},
-					"mainAccount": {
-						"$ref": "#/components/schemas/PG_AccountResponse"
-					}
-				}
-			},
-			"PG_TransactionStateData": {
-				"type": "object",
-				"properties": {
-					"amountPercentage": {
-						"type": "number"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"rejectReason": {
-						"type": "string"
-					},
-					"countPercentage": {
-						"type": "number"
-					},
-					"count": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_LimitDtoResponse": {
-				"type": "object",
-				"required": [
-					"accountGroupId",
-					"limitType",
-					"lowerLimit",
-					"operation",
-					"upperLimit"
-				],
-				"properties": {
-					"accountGroupId": {
-						"format": "int32",
-						"description": "Account Group Id which Limit is defined.",
-						"type": "integer"
-					},
-					"days": {
-						"format": "int32",
-						"description": "Number of days defined for the Limit.",
-						"type": "integer"
-					},
-					"upperLimit": {
-						"description": "Upper limit amount being defined.",
-						"type": "number",
-						"example": 10.0
-					},
-					"lowerLimit": {
-						"description": "Lower limit amount being defined.",
-						"type": "number",
-						"example": 10.0
-					},
-					"priority": {
-						"description": "Priority defined for the Limit.",
-						"type": "string",
-						"enum": [
-							"NO_PRIORITY",
-							"LOW_PRIORITY",
-							"MEDIUM_PRIORITY",
-							"HIGH_PRIORITY",
-							"URGENT_PRIORITY"
-						],
-						"example": "10.0"
-					},
-					"operation": {
-						"description": "Operation type which Limit is defined.",
-						"type": "string",
-						"enum": [
-							"P2P_PAYMENT_IN",
-							"P2P_PAYMENT_OUT",
-							"P2P_CHARGE_IN",
-							"P2P_CHARGE_OUT",
-							"CASH_IN",
-							"CASH_OUT",
-							"REMITTANCE_IN",
-							"REMITTANCE_OUT",
-							"EXCHANGE_IN",
-							"FEE",
-							"REMITTENCE"
-						],
-						"example": "true"
-					},
-					"limitType": {
-						"description": "Limit type which Limit is defined.",
-						"type": "string",
-						"enum": [
-							"DAILY",
-							"WEEKLY",
-							"MONTHLY",
-							"YEARLY",
-							"BY_TRANSACTION",
-							"MONTHLY_BY_BALANCE",
-							"MONTHLY_BY_SUM_TRANSACTIONS",
-							"BY_DAYS",
-							"ACCOUNT_MIGRATION",
-							"REMITTENCE",
-							"GENERAL_TRANSACTION_LIMIT"
-						],
-						"example": "true"
-					}
-				}
-			},
-			"PG_NotificationData": {
-				"type": "object",
-				"properties": {
-					"date": {
-						"type": "string"
-					},
-					"data": {
-						"type": "string"
-					},
-					"idEvent": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"id": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"time": {
-						"type": "string"
-					},
-					"priority": {
-						"type": "string"
-					},
-					"title": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_GMoneyAccountMovementData": {
-				"type": "object",
-				"properties": {
-					"date": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"amount": {
-						"format": "double",
-						"type": "number"
-					},
-					"currency": {
-						"type": "string"
-					},
-					"detail": {
-						"type": "string"
-					},
-					"order": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_RequestCardCreateCorrespondence": {
-				"type": "object",
-				"properties": {
-					"matchCode": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"streetNumber": {
-						"type": "string"
-					},
-					"provinceCode": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"commune": {
-						"type": "string"
-					},
-					"postalCode": {
-						"type": "string"
-					},
-					"reference": {
-						"type": "string"
-					},
-					"phone": {
-						"type": "string"
-					},
-					"countryCode": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"street": {
-						"type": "string"
-					},
-					"flat": {
-						"type": "string"
-					},
-					"locationCode": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"department": {
-						"type": "string"
-					},
-					"geoReferenceLength": {
-						"type": "string"
-					},
-					"geoReferenceLatitude": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_MonoTransactionResponseData": {
-				"type": "object"
-			},
-			"PG_CardStatusDto": {
-				"type": "object",
-				"properties": {
-					"country": {
-						"type": "string"
-					},
-					"cardLastFourDigits": {
-						"type": "string"
-					},
-					"cardType": {
-						"type": "string"
-					},
-					"accountNumber": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"codeStatus": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"statusChangeDate": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"cardId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"state": {
-						"type": "string"
-					},
-					"brand": {
-						"type": "string"
-					},
-					"productType": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_SendMoneyTransaction": {
-				"type": "object",
-				"properties": {
-					"referenceNumber": {
-						"type": "string"
-					},
-					"requestId": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CashWithdrawalRequest": {
-				"type": "object",
-				"required": [
-					"accountId",
-					"processToken"
-				],
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"processToken": {
-						"minLength": 1,
-						"type": "string",
-						"maxLength": 2147483647
-					}
-				}
-			},
-			"PG_B2bAccountResponse": {
-				"type": "object",
-				"properties": {
-					"accountState": {
-						"type": "string"
-					},
-					"amountMonthAccumulator": {
-						"type": "number"
-					},
-					"minAmountUsdP2pInternational": {
-						"format": "double",
-						"type": "number"
-					},
-					"minAmountUsdExchange": {
-						"format": "double",
-						"type": "number"
-					},
-					"maxAmountUsdP2pTransaction": {
-						"format": "double",
-						"type": "number"
-					},
-					"accountType": {
-						"type": "string"
-					},
-					"flagCountryCode": {
-						"type": "string"
-					},
-					"limitAmountMovementUvt": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"currencyMain": {
-						"type": "boolean"
-					},
-					"minAmountUsdDeposit": {
-						"type": "number"
-					},
-					"maxAmountUsdWithdrawal": {
-						"format": "double",
-						"type": "number"
-					},
-					"checkDataAccount": {
-						"type": "string"
-					},
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"maxAmountUsdExchange": {
-						"format": "double",
-						"type": "number"
-					},
-					"balance": {
-						"$ref": "#/components/schemas/PG_Balance"
-					},
-					"maxAmountUsdDeposit": {
-						"type": "number"
-					},
-					"minAmountUsdWithdrawal": {
-						"format": "double",
-						"type": "number"
-					},
-					"rate": {
-						"format": "double",
-						"type": "number"
-					},
-					"countryCode": {
-						"type": "string"
-					},
-					"clientMain": {
-						"type": "boolean"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"minAmountUsdP2pTransaction": {
-						"format": "double",
-						"type": "number"
-					},
-					"slaHoursWithdrawal": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"accountBranch": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardWhiteListConfigResponse": {
-				"type": "object",
-				"properties": {
-					"quantityAvailable": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_TransactionalAttemptsData": {
-				"type": "object",
-				"properties": {
-					"isTransactionValid": {
-						"type": "boolean"
-					},
-					"maxAmount": {
-						"type": "number"
-					}
-				}
-			},
-			"PG_PinPassValidateRequest": {
-				"type": "object",
-				"required": [
-					"pinPass"
-				],
-				"properties": {
-					"cardId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"pinPass": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CurrencyResponse": {
-				"type": "object",
-				"properties": {
-					"countryCode": {
-						"type": "string"
-					},
-					"flagCountryCode": {
-						"type": "string"
-					},
-					"currencyCode": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_ActiveCardsResponse": {
-				"type": "object",
-				"properties": {
-					"hasCards": {
-						"type": "boolean"
-					},
-					"type": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_WithdrawalRequest": {
-				"type": "object",
-				"required": [
-					"accountId",
-					"amount"
-				],
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"processToken": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_LimitTransactionData": {
-				"type": "object",
-				"properties": {
-					"records": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"type": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CashInputData": {
-				"type": "object",
-				"properties": {
-					"currencyPesos": {
-						"type": "number"
-					},
-					"cardLastFourDigits": {
-						"type": "string"
-					},
-					"trxUpdateDate": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"redeemed": {
-						"type": "boolean"
-					},
-					"cashBackForCurrencyPesos": {
-						"type": "number"
-					},
-					"commerce": {
-						"type": "string"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"trxDate": {
-						"format": "date-time",
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardValidLastFourRequest": {
-				"type": "object",
-				"properties": {
-					"lastFourDigits": {
-						"type": "string"
-					},
-					"cardId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_CardDecrypt": {
-				"type": "object",
-				"properties": {
-					"cvv": {
-						"type": "string"
-					},
-					"lastFourDigits": {
-						"type": "string"
-					},
-					"fechaVto": {
-						"type": "string"
-					},
-					"pan": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_TreasuryDetailsTransaction": {
-				"type": "object",
-				"properties": {
-					"bankMovementId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"cashCallStatus": {
-						"type": "string",
-						"enum": [
-							"PENDING_VERIFICATION",
-							"VERIFIED",
-							"RELEASED",
-							"CANCELLED",
-							"REJECTED",
-							"PAID"
-						]
-					},
-					"status": {
-						"type": "string",
-						"enum": [
-							"REVERSED",
-							"PENDING",
-							"CONCILIATED",
-							"RELEASED",
-							"PAID"
-						]
-					}
-				}
-			},
-			"PG_ChangeStatusControversyDto": {
-				"type": "object",
-				"properties": {
-					"message": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_GMoneyMasterBalanceRS": {
-				"type": "object",
-				"properties": {
-					"result": {
-						"type": "boolean"
-					},
-					"balance2": {
-						"format": "double",
-						"type": "number"
-					},
-					"balance": {
-						"format": "double",
-						"type": "number"
-					},
-					"errorCode": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"transactionId": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CreateCardResponse": {
-				"type": "object",
-				"properties": {
-					"estadoTipoCodigo": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"nameTypeProduct": {
-						"type": "string"
-					},
-					"cardId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"brand": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"estadoCodigo": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_FluxMovement": {
-				"type": "object",
-				"properties": {
-					"prefetch": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_OperatorCardData": {
-				"type": "object",
-				"properties": {
-					"cardReferenceToken": {
-						"type": "string"
-					},
-					"flagLockCard": {
-						"type": "boolean"
-					},
-					"cardId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"tipoTarjetaCodigo": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_PhysicalCardStatusResponse": {
-				"type": "object",
-				"properties": {
-					"idTx": {
-						"type": "string"
-					},
-					"status": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_ProvinceData": {
-				"type": "object",
-				"properties": {
-					"provinceCode": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"provinceDescription": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_ChangeAccountTypeDto": {
-				"type": "object",
-				"required": [
-					"accountBranchName",
-					"accountType",
-					"currencyCode",
-					"customerId"
-				],
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"accountBranchName": {
-						"type": "string"
-					},
-					"accountType": {
-						"type": "string"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"currencyCode": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CashWithdrawalResponse": {
-				"type": "object",
-				"properties": {
-					"messageCashWithdrawal": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardPhysicalStatusDto": {
-				"type": "object",
-				"properties": {
-					"country": {
-						"type": "string"
-					},
-					"createdDate": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"streetNumber": {
-						"type": "string"
-					},
-					"street": {
-						"type": "string"
-					},
-					"commune": {
-						"type": "string"
-					},
-					"department": {
-						"type": "string"
-					},
-					"deliveryDate": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"status": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardDataResponse": {
-				"type": "object",
-				"properties": {
-					"values": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_CardDetails"
-						}
-					},
-					"status": {
-						"$ref": "#/components/schemas/PG_StatusData"
-					}
-				}
-			},
-			"PG_GMoneyMasterMovementData": {
-				"type": "object",
-				"properties": {
-					"date": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"amount": {
-						"format": "double",
-						"type": "number"
-					},
-					"currency": {
-						"type": "string"
-					},
-					"detail": {
-						"type": "string"
-					},
-					"clientMobile": {
-						"type": "string"
-					},
-					"transactionId": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_B2bCreateAccountReq": {
-				"type": "object",
-				"properties": {
-					"idType": {
-						"type": "string"
-					},
-					"countryCode": {
-						"type": "string"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"businessName": {
-						"type": "string"
-					},
-					"legalRepresentatives": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_B2bLegalRepData"
-						}
-					},
-					"idNumber": {
-						"type": "string"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_AccountCustomerDto": {
-				"type": "object",
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"balance": {
-						"$ref": "#/components/schemas/PG_Balance"
-					},
-					"isMain": {
-						"type": "boolean"
-					},
-					"partnerAccountId": {
-						"type": "string"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"accountCurrency": {
-						"type": "string"
-					},
-					"accountBranch": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_AccountBalanceData": {
-				"type": "object",
-				"properties": {
-					"totalBalance": {
-						"format": "double",
-						"type": "number"
-					}
-				}
-			},
-			"PG_CardStatusRequest": {
-				"type": "object",
-				"properties": {
-					"cardLastFourDigits": {
-						"type": "string"
-					},
-					"internalManager": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"cardType": {
-						"type": "string",
-						"enum": [
-							"PHYSICAL",
-							"VIRTUAL",
-							"VIRTUAL_AND_PHYSICAL"
-						]
-					},
-					"accountNumber": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"endDateTime": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"getWLState": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"startDateTime": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"countryCode": {
-						"type": "string"
-					},
-					"cardId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"comment": {
-						"type": "string"
-					},
-					"state": {
-						"type": "string"
-					},
-					"brand": {
-						"type": "string",
-						"enum": [
-							"MASTERCARD",
-							"VISA"
-						]
-					},
-					"email": {
-						"type": "string"
-					},
-					"status": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CustomerDataDto": {
-				"type": "object",
-				"properties": {
-					"firstName": {
-						"type": "string"
-					},
-					"lastName": {
-						"type": "string"
-					},
-					"partner": {
-						"type": "string",
-						"enum": [
-							"TEBCA",
-							"MAMBU",
-							"WORLDLINE"
-						]
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"fullName": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_VerifyWithdrawalData": {
-				"type": "object",
-				"required": [
-					"amount",
-					"currencyCode",
-					"customerId",
-					"description",
-					"email",
-					"product",
-					"productReference"
-				],
-				"properties": {
-					"amount": {
-						"type": "number"
-					},
-					"product": {
-						"type": "string"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"productReference": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardStatusLogDto": {
-				"type": "object",
-				"properties": {
-					"createdDate": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"cardLogId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"comment": {
-						"type": "string"
-					},
-					"counter": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"state": {
-						"type": "string",
-						"enum": [
-							"CLOSE",
-							"ACTIVE",
-							"LOCK"
-						]
-					},
-					"operatorType": {
-						"type": "string",
-						"enum": [
-							"SYSTEM",
-							"USER",
-							"ADMIN"
-						]
-					},
-					"operator": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_ProvinceResponse": {
-				"type": "object",
-				"properties": {
-					"values": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_ProvinceData"
-						}
-					},
-					"status": {
-						"$ref": "#/components/schemas/PG_StatusData"
-					}
-				}
-			},
-			"PG_GMoneyAccountMovementsRS": {
-				"type": "object",
-				"properties": {
-					"result": {
-						"type": "boolean"
-					},
-					"errorCode": {
-						"type": "string"
-					},
-					"movements": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_GMoneyAccountMovementData"
-						}
-					},
-					"message": {
-						"type": "string"
-					},
-					"transactionId": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_RefundData": {
-				"type": "object",
-				"required": [
-					"amount",
-					"businessBankCode",
-					"businessBankId",
-					"businessBankName",
-					"corePartnerId",
-					"currencyCode",
-					"customerEmail",
-					"customerId",
-					"product",
-					"transactionId"
-				],
-				"properties": {
-					"originDiff": {
-						"type": "number"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"product": {
-						"type": "string"
-					},
-					"businessBankCode": {
-						"type": "string"
-					},
-					"businessBankId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"description": {
-						"type": "string"
-					},
-					"productReference": {
-						"type": "string"
-					},
-					"advertisingId": {
-						"type": "string"
-					},
-					"corePartnerId": {
-						"type": "string"
-					},
-					"deviceCode": {
-						"type": "string"
-					},
-					"transactionId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"paymentType": {
-						"type": "string",
-						"enum": [
-							"PAYCASH",
-							"ONE_CLICK",
-							"WEBPAY",
-							"WIRE_TRANSFER",
-							"WALLET",
-							"VALE_VISTA"
-						]
-					},
-					"costDto": {
-						"$ref": "#/components/schemas/PG_CostDto"
-					},
-					"externalReferenceId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"appsFlyerId": {
-						"type": "string"
-					},
-					"businessBankName": {
-						"type": "string"
-					},
-					"customerEmail": {
-						"type": "string"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"bankMovementId": {
-						"type": "string"
-					},
-					"paymentMethod": {
-						"type": "string"
-					},
-					"processToken": {
-						"type": "string"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"device": {
-						"type": "string"
-					},
-					"refuseReason": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_ControversyOperationsRequest": {
-				"type": "object",
-				"properties": {
-					"amount": {
-						"type": "number"
-					},
-					"cardLastFourDigits": {
-						"type": "string"
-					},
-					"cardType": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"idNumberType": {
-						"type": "string"
-					},
-					"idNumber": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"salesforceCaseId": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardEmissionPayRequest": {
-				"type": "object",
-				"required": [
-					"accountId",
-					"district",
-					"province"
-				],
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"province": {
-						"type": "string"
-					},
-					"district": {
-						"type": "string"
-					},
-					"processToken": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_B2bLegalRepData": {
-				"type": "object",
-				"properties": {
-					"lastName": {
-						"type": "string"
-					},
-					"idType": {
-						"type": "string"
-					},
-					"phoneNumber": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					},
-					"idNumber": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_P2pTransactionDto": {
-				"type": "object",
-				"properties": {
-					"p2pTransactionId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"createdDateMillis": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"receiver": {
-						"$ref": "#/components/schemas/PG_AccountDto"
-					},
-					"initiator": {
-						"$ref": "#/components/schemas/PG_AccountDto"
-					},
-					"secondPartUsername": {
-						"type": "string"
-					},
-					"discountAmount": {
-						"type": "number"
-					},
-					"trxType": {
-						"type": "string",
-						"enum": [
-							"NATIONAL",
-							"INTERNATIONAL"
-						]
-					},
-					"type": {
-						"type": "string",
-						"enum": [
-							"PAGO_1_1",
-							"COBRO_1_1",
-							"COBRO_1_MUCHOS",
-							"EXCHANGE",
-							"EXCHANGE_ADMIN",
-							"REFUND_ADMIN"
-						]
-					},
-					"cancelledByInitiatorDateMillis": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"originAmount": {
-						"type": "number"
-					},
-					"rejectedByRecipientDateMillis": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"quote": {
-						"$ref": "#/components/schemas/PG_QuoteDto"
-					},
-					"exchangeRate": {
-						"type": "number"
-					},
-					"refuseComment": {
-						"type": "string"
-					},
-					"acceptedByRecipientDateMillis": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"comment": {
-						"type": "string"
-					},
-					"secondPartProfilePhoto": {
-						"type": "string"
-					},
-					"discountAmountUsd": {
-						"type": "number"
-					},
-					"status": {
-						"type": "string",
-						"enum": [
-							"WAITING_RECIPIENT_ACCEPT",
-							"CANCELLED_BY_INITIATOR",
-							"REJECTED_BY_RECIPIENT",
-							"ACCEPTED_BY_RECIPIENT",
-							"ACCEPTED_BY_INITIATOR",
-							"CANCELLED_BY_SYSTEM",
-							"ERROR"
-						]
-					},
-					"destinationAmount": {
-						"type": "number"
-					}
-				}
-			},
-			"PG_PushMessageData": {
-				"type": "object",
-				"properties": {
-					"payload": {
-						"additionalProperties": {
-							"type": "object"
-						},
-						"type": "object"
-					},
-					"userId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"workflowId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_CardValidLastFourResponse": {
-				"type": "object",
-				"properties": {
-					"cardExists": {
-						"type": "boolean"
-					}
-				}
-			},
-			"PG_Details": {
-				"type": "object",
-				"properties": {
-					"version": {
-						"type": "string"
-					},
-					"url": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CloseAccountResponse": {
-				"type": "object",
-				"properties": {
-					"message": {
-						"type": "string"
-					},
-					"status": {
-						"$ref": "#/components/schemas/PG_StatusData"
-					}
-				}
-			},
-			"PG_LimitsAmountMovement": {
-				"type": "object",
-				"properties": {
-					"accountGroupId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"countryCode": {
-						"type": "string"
-					},
-					"branchName": {
-						"type": "string"
-					},
-					"limitAmountMovement": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"limitAmountMovementUvt": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"maxAccountBalance": {
-						"type": "number"
-					}
-				}
-			},
-			"PG_CardControversyDto": {
-				"type": "object",
-				"properties": {
-					"country": {
-						"type": "string"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"resolutionChannel": {
-						"type": "string"
-					},
-					"createdDate": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"internalResponsible": {
-						"type": "string"
-					},
-					"closedDate": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"bossWhoAuthorizes": {
-						"type": "string"
-					},
-					"cardControversyId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"comment": {
-						"type": "string"
-					},
-					"status": {
-						"type": "string",
-						"enum": [
-							"OPEN",
-							"TEMPORARY_REFUND",
-							"CANCEL_REFUND",
-							"REJECTED",
-							"CLOSED",
-							"BLOCKED"
-						]
-					}
-				}
-			},
-			"PG_AdmRefundRequest": {
-				"type": "object",
-				"required": [
-					"accountId",
-					"amount",
-					"bankAccountData",
-					"customerId",
-					"refundReason"
-				],
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"refundReason": {
-						"$ref": "#/components/schemas/PG_RefundReasonDTO"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"bankAccountData": {
-						"$ref": "#/components/schemas/PG_CustomerBankAccount"
-					}
-				}
-			},
-			"PG_AccountDataDto": {
-				"type": "object",
-				"properties": {
-					"accountStatus": {
-						"type": "string"
-					},
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"partnerAccountId": {
-						"type": "string"
-					},
-					"clientMain": {
-						"type": "boolean"
-					},
-					"accountGroup": {
-						"$ref": "#/components/schemas/PG_AccountGroupDataDto"
-					},
-					"currencyMain": {
-						"type": "boolean"
-					},
-					"customer": {
-						"$ref": "#/components/schemas/PG_CustomerDataDto"
-					}
-				}
-			},
-			"PG_AccountRequest": {
-				"type": "object",
-				"properties": {
-					"idAccount": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"brand": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_MassMovementReq": {
-				"type": "object",
-				"required": [
-					"destinationAccountIds",
-					"fileName",
-					"operationType",
-					"paymentDescription"
-				],
-				"properties": {
-					"fileName": {
-						"type": "string"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"originAccountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"operationType": {
-						"type": "string"
-					},
-					"destinationAccountIds": {
-						"type": "array",
-						"items": {
-							"format": "int32",
-							"type": "integer"
-						}
-					},
-					"paymentDescription": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_GMoneyRegisterAccountData": {
-				"type": "object",
-				"required": [
-					"birthDate",
-					"clientDeviceId",
-					"documentNumber",
-					"phoneNumber",
-					"referenceNumber",
-					"ubigeo"
-				],
-				"properties": {
-					"phoneNumber": {
-						"minLength": 7,
-						"type": "string",
-						"maxLength": 2147483647
-					},
-					"referenceNumber": {
-						"type": "string"
-					},
-					"documentNumber": {
-						"type": "string"
-					},
-					"clientDeviceId": {
-						"type": "string"
-					},
-					"ubigeo": {
-						"minLength": 6,
-						"type": "string",
-						"maxLength": 6
-					},
-					"userEmail": {
-						"type": "string"
-					},
-					"birthDate": {
-						"minLength": 8,
-						"type": "string",
-						"maxLength": 8
-					}
-				}
-			},
-			"PG_ControversyChangeStatus": {
-				"type": "object",
-				"properties": {
-					"finalStatus": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"controversyId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_GMoneyMasterConfigsData": {
-				"type": "object",
-				"properties": {
-					"min": {
-						"format": "double",
-						"type": "number"
-					},
-					"max": {
-						"format": "double",
-						"type": "number"
-					},
-					"fee": {
-						"format": "double",
-						"type": "number"
-					},
-					"type": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_LimitDataResponse": {
-				"type": "object",
-				"required": [
-					"details",
-					"isTransactionValid"
-				],
-				"properties": {
-					"isTransactionValid": {
-						"description": "Operation validation valid flag.",
-						"type": "boolean",
-						"example": true
-					},
-					"details": {
-						"description": "List of limits applied in the validation.",
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_LimitDataDetail"
-						}
-					}
-				}
-			},
-			"PG_Response": {
-				"type": "object",
-				"properties": {
-					"showGenericResponse": {
-						"type": "boolean"
-					},
-					"type": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CustomerIdIsOrdinaryAccountAndSEDPEDto": {
-				"type": "object",
-				"properties": {
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"isOrdinaryAndSEDPE": {
-						"type": "boolean"
-					}
-				}
-			},
-			"PG_FullNamePhysicalCardResponse": {
-				"type": "object",
-				"properties": {
-					"fullNameCard": {
-						"type": "string"
-					},
-					"magneticStripeName": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CashbackChangeStatusResponse": {
-				"type": "object",
-				"properties": {
-					"message": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_MultiWalletMovementRequest": {
-				"type": "object",
-				"properties": {
-					"remittanceMovementList": {
-						"type": "array",
-						"items": {
-							"type": "array",
-							"items": {
-								"$ref": "#/components/schemas/PG_Movement"
-							}
-						}
-					},
-					"accountId": {
-						"type": "string"
-					},
-					"cashoutMovementList": {
-						"type": "array",
-						"items": {
-							"type": "array",
-							"items": {
-								"$ref": "#/components/schemas/PG_Movement"
-							}
-						}
-					},
-					"isMain": {
-						"type": "boolean"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"cashinMovementList": {
-						"type": "array",
-						"items": {
-							"type": "array",
-							"items": {
-								"$ref": "#/components/schemas/PG_Movement"
-							}
-						}
-					},
-					"p2pMovementList": {
-						"type": "array",
-						"items": {
-							"type": "array",
-							"items": {
-								"$ref": "#/components/schemas/PG_Movement"
-							}
-						}
-					},
-					"currencyCode": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_AccountGroupDataDto": {
-				"type": "object",
-				"properties": {
-					"accountBranchName": {
-						"type": "string",
-						"enum": [
-							"GLOBAL_81",
-							"GLOBAL_CARD",
-							"GLOBAL_SEDPE",
-							"GLOBAL_USA",
-							"GLOBAL_PERU",
-							"B2B_GLOBAL_81"
-						]
-					},
-					"instance": {
-						"type": "string",
-						"enum": [
-							"GLOBAL_CHILE",
-							"GLOBAL_COLOMBIA",
-							"GLOBAL_USA",
-							"GLOBAL_PERU"
-						]
-					},
-					"countryCode": {
-						"type": "string"
-					},
-					"accountType": {
-						"type": "string"
-					},
-					"currencySymbol": {
-						"type": "string"
-					},
-					"currencyCode": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_MobileAppInfo": {
-				"type": "object",
-				"properties": {
-					"iosBuild": {
-						"type": "string"
-					},
-					"androidCompilation": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"androidVersion": {
-						"type": "string"
-					},
-					"iosMandatory": {
-						"type": "boolean"
-					},
-					"androidMandatory": {
-						"type": "boolean"
-					},
-					"iosVersion": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"status": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardDetails": {
-				"type": "object",
-				"properties": {
-					"estadoTipoCodigo": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"marca": {
-						"type": "string"
-					},
-					"cardEncrypted": {
-						"type": "string"
-					},
-					"cardReferenceToken": {
-						"type": "string"
-					},
-					"denominacion": {
-						"type": "string"
-					},
-					"tarjetaCifradaCustom": {
-						"type": "string"
-					},
-					"estadoDescripcion": {
-						"type": "string"
-					},
-					"tarjetaCifrada": {
-						"type": "string"
-					},
-					"estadoCodigo": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"card": {
-						"$ref": "#/components/schemas/PG_CardDecrypt"
-					}
-				}
-			},
-			"PG_CardWhiteListResponse": {
-				"type": "object",
-				"properties": {
-					"inList": {
-						"type": "boolean"
-					}
-				}
-			},
-			"PG_CoreWithdrawalReq": {
-				"type": "object",
-				"required": [
-					"accountId",
-					"amount",
-					"channelParameter",
-					"globalTransactionId",
-					"homeMovementType",
-					"operation"
-				],
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"fees": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_CoreFeeData"
-						}
-					},
-					"globalTransactionId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"homeMovementType": {
-						"type": "string",
-						"enum": [
-							"P2P_PAYMENT",
-							"P2P_CHARGE",
-							"EXCHANGE",
-							"P2P_EXCHANGE_ADMIN",
-							"CASH_FLOW",
-							"REFUND",
-							"OTHER",
-							"AUTOMATIC_TX_FUND",
-							"AUTOMATIC_REFUND",
-							"CARD",
-							"REVERSED_CARD",
-							"CASH_IN_G81",
-							"CASH_OUT_G81",
-							"CASH_OUT_TO_GCARD",
-							"CASH_IN_FROM_GCARD",
-							"SEDPE_UPGRADE",
-							"REVERSED_MOVEMENT",
-							"BALANCE_TRANSFER",
-							"GMONEY_UPGRADE",
-							"CASH_BACK",
-							"CARD_ISSUE_SENT",
-							"CARD_ISSUE_RECEIVED",
-							"CARD_CASH_BACK_SENT",
-							"CARD_CASH_BACK_RECEIVED"
-						]
-					},
-					"channelParameter": {
-						"type": "string",
-						"enum": [
-							"DEFAULT",
-							"CARD_ISSUE",
-							"CASH_BACK",
-							"COMMISSION",
-							"G81_TO_GC",
-							"GC_TO_G81",
-							"CARD_CONTROVERSY",
-							"BBVA_CO_COP",
-							"BANCOLOMBIA_COP",
-							"INTER_INSTANCE",
-							"KUSHKI",
-							"FEE",
-							"SAME_INSTANCE",
-							"IVA",
-							"GMF",
-							"COMISION_WEBPAY"
-						]
-					},
-					"paymentMethod": {
-						"type": "string"
-					},
-					"operation": {
-						"type": "string",
-						"enum": [
-							"P2P_PAYMENT_IN",
-							"P2P_PAYMENT_OUT",
-							"P2P_CHARGE_IN",
-							"P2P_CHARGE_OUT",
-							"CASH_IN",
-							"CASH_OUT",
-							"REMITTANCE_IN",
-							"REMITTANCE_OUT",
-							"EXCHANGE_IN",
-							"FEE",
-							"REMITTENCE"
-						]
-					}
-				}
-			},
-			"PG_P2PTransactionData": {
-				"type": "object",
-				"required": [
-					"p2pTransactionId"
-				],
-				"properties": {
-					"p2pTransactionId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"refuseComment": {
-						"type": "string"
-					},
-					"hash": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_GMoneyOperationTransferRQ": {
-				"type": "object",
-				"properties": {
-					"amount": {
-						"format": "double",
-						"type": "number"
-					},
-					"referenceNumber": {
-						"type": "string"
-					},
-					"clientDeviceId": {
-						"type": "string"
-					},
-					"checksum": {
-						"type": "string"
-					},
-					"senderAccountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"receiverAccountId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_RefundReasonDTO": {
-				"type": "object",
-				"properties": {
-					"code": {
-						"type": "string"
-					},
-					"enable": {
-						"type": "boolean"
-					},
-					"name": {
-						"type": "string"
-					},
-					"id": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_GMoneyOperationTransferRS": {
-				"type": "object",
-				"properties": {
-					"result": {
-						"type": "boolean"
-					},
-					"fee": {
-						"format": "double",
-						"type": "number"
-					},
-					"errorCode": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"transactionId": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_LockCardRequest": {
-				"type": "object",
-				"properties": {
-					"rut": {
-						"type": "string"
-					},
-					"cardCodType": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"email": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardControversyLogDto": {
-				"type": "object",
-				"properties": {
-					"createdDate": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"actualStatus": {
-						"type": "string",
-						"enum": [
-							"OPEN",
-							"TEMPORARY_REFUND",
-							"CANCEL_REFUND",
-							"REJECTED",
-							"CLOSED",
-							"BLOCKED"
-						]
-					},
-					"cardControversyId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"logId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"comment": {
-						"type": "string"
-					},
-					"operator": {
-						"type": "string"
-					},
-					"previousStatus": {
-						"type": "string",
-						"enum": [
-							"OPEN",
-							"TEMPORARY_REFUND",
-							"CANCEL_REFUND",
-							"REJECTED",
-							"CLOSED",
-							"BLOCKED"
-						]
-					}
-				}
-			},
-			"PG_CustomerBankAccount": {
-				"type": "object",
-				"properties": {
-					"lastName": {
-						"type": "string"
-					},
-					"city": {
-						"type": "string"
-					},
-					"routingCodeType3": {
-						"type": "string"
-					},
-					"channel": {
-						"type": "string"
-					},
-					"routingCodeType1": {
-						"type": "string"
-					},
-					"routingCodeType2": {
-						"type": "string"
-					},
-					"pseudoDda": {
-						"type": "string"
-					},
-					"type": {
-						"type": "string"
-					},
-					"accountBankName": {
-						"type": "string"
-					},
-					"generatedId": {
-						"type": "string"
-					},
-					"routeId": {
-						"type": "string"
-					},
-					"countryCode": {
-						"type": "string"
-					},
-					"state": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"dni": {
-						"type": "string"
-					},
-					"isCompleted": {
-						"type": "boolean"
-					},
-					"accountBankId": {
-						"type": "string"
-					},
-					"accountBankCode": {
-						"type": "string"
-					},
-					"address": {
-						"type": "string"
-					},
-					"accountType": {
-						"type": "string"
-					},
-					"sex": {
-						"type": "string"
-					},
-					"routingCodeValue1": {
-						"type": "string"
-					},
-					"dniType": {
-						"type": "string"
-					},
-					"accountNumber": {
-						"type": "string"
-					},
-					"routingCodeValue3": {
-						"type": "string"
-					},
-					"typeTransfer": {
-						"type": "string"
-					},
-					"routingCodeValue2": {
-						"type": "string"
-					},
-					"branchCode": {
-						"type": "string"
-					},
-					"phoneNumber": {
-						"type": "string"
-					},
-					"dob": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					},
-					"postCode": {
-						"type": "string"
-					},
-					"location": {
-						"type": "string"
-					},
-					"bankAlias": {
-						"type": "string"
-					},
-					"countryName": {
-						"type": "string"
-					},
-					"currencyCode": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_PhysicalCardStatusRequest": {
-				"type": "object",
-				"required": [
-					"affinity",
-					"card",
-					"email",
-					"idTx",
-					"lastFourDigits",
-					"ownerName",
-					"status"
-				],
-				"properties": {
-					"address": {
-						"type": "string"
-					},
-					"ownerName": {
-						"type": "string"
-					},
-					"lastFourDigits": {
-						"minLength": 4,
-						"pattern": "[\\d]{4}",
-						"type": "string",
-						"maxLength": 4
-					},
-					"deliveryDateTime": {
-						"type": "string"
-					},
-					"coldDelivery": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"card": {
-						"minLength": 1,
-						"type": "string",
-						"maxLength": 1
-					},
-					"idTx": {
-						"type": "string"
-					},
-					"status": {
-						"type": "string"
-					},
-					"affinity": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardOperationsResponse": {
-				"type": "object",
-				"properties": {
-					"msj": {
-						"type": "object"
-					},
-					"codigoOperacion": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"status": {
-						"$ref": "#/components/schemas/PG_StatusData"
-					}
-				}
-			},
-			"PG_AccountGroup": {
-				"type": "object",
-				"properties": {
-					"accountBranchKey": {
-						"type": "string"
-					},
-					"minAmountUsdExchange": {
-						"format": "double",
-						"type": "number"
-					},
-					"accountBranchName": {
-						"type": "string",
-						"enum": [
-							"GLOBAL_81",
-							"GLOBAL_CARD",
-							"GLOBAL_SEDPE",
-							"GLOBAL_USA",
-							"GLOBAL_PERU",
-							"B2B_GLOBAL_81"
-						]
-					},
-					"instance": {
-						"type": "string",
-						"enum": [
-							"GLOBAL_CHILE",
-							"GLOBAL_COLOMBIA",
-							"GLOBAL_USA",
-							"GLOBAL_PERU"
-						]
-					},
-					"maxAmountUsdP2pTransaction": {
-						"format": "double",
-						"type": "number"
-					},
-					"accountGroupId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"maxAmountUsdWithdrawal": {
-						"format": "double",
-						"type": "number"
-					},
-					"maxPurchaseWithCard": {
-						"format": "double",
-						"type": "number"
-					},
-					"maxAmountUsdDeposit": {
-						"type": "number"
-					},
-					"countryCode": {
-						"type": "string"
-					},
-					"slaHoursWithdrawal": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"minAmountUsdP2pInternational": {
-						"format": "double",
-						"type": "number"
-					},
-					"isMainCurrency": {
-						"type": "boolean"
-					},
-					"accountType": {
-						"type": "string"
-					},
-					"maxAccountUsdBalance": {
-						"format": "double",
-						"type": "number"
-					},
-					"currencySymbol": {
-						"type": "string"
-					},
-					"flagCountryCode": {
-						"type": "string"
-					},
-					"limitAmountMovement": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"limitAmountMovementUvt": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"minAmountUsdDeposit": {
-						"type": "number"
-					},
-					"maxAmountUsdExchange": {
-						"format": "double",
-						"type": "number"
-					},
-					"minAmountUsdWithdrawal": {
-						"format": "double",
-						"type": "number"
-					},
-					"productTypeKey": {
-						"type": "string"
-					},
-					"businessType": {
-						"type": "string",
-						"enum": [
-							"B2C",
-							"B2B"
-						]
-					},
-					"minAmountUsdP2pTransaction": {
-						"format": "double",
-						"type": "number"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"accountHolderType": {
-						"type": "string"
-					},
-					"maxAccountBalance": {
-						"type": "number"
-					}
-				}
-			},
-			"PG_QuoteDto": {
-				"type": "object",
-				"properties": {
-					"fee": {
-						"type": "number"
-					}
-				}
-			},
-			"PG_PinPassUpdateRequest": {
-				"type": "object",
-				"required": [
-					"pinNuevo"
-				],
-				"properties": {
-					"cardLastFourDigits": {
-						"type": "string"
-					},
-					"cardId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"pinNuevo": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_FullnamephysicalcardRequest": {
-				"type": "object",
-				"properties": {
-					"lastName": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_MovementDetail": {
-				"type": "object",
-				"properties": {
-					"originAmount": {
-						"type": "number"
-					},
-					"originCurrency": {
-						"type": "string"
-					},
-					"destinyAmount": {
-						"type": "number"
-					},
-					"cancelledDateMillis": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"destinyCurrency": {
-						"type": "string"
-					},
-					"beneficiaryId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_GMoneyOperationFindData": {
-				"type": "object",
-				"properties": {
-					"transactionType": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"result": {
-						"type": "boolean"
-					},
-					"amount": {
-						"format": "double",
-						"type": "number"
-					},
-					"referenceNumber": {
-						"type": "string"
-					},
-					"errorCode": {
-						"type": "string"
-					},
-					"transactionDate": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"transactionId": {
-						"type": "string"
-					},
-					"status": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_TransactionState": {
-				"type": "object",
-				"properties": {
-					"transactionState": {
-						"type": "string"
-					},
-					"transactionStateData": {
-						"$ref": "#/components/schemas/PG_TransactionStateData"
-					}
-				}
-			},
-			"PG_StatusData": {
-				"type": "object",
-				"properties": {
-					"statusDescription": {
-						"type": "string"
-					},
-					"statusCode": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_Page": {
-				"type": "object",
-				"properties": {
-					"total": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"hasNext": {
-						"type": "boolean"
-					},
-					"page": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"content": {
-						"type": "object"
-					}
-				}
-			},
-			"PG_AccountResponse": {
-				"type": "object",
-				"properties": {
-					"accountState": {
-						"type": "string"
-					},
-					"amountMonthAccumulator": {
-						"type": "number"
-					},
-					"minAmountUsdP2pInternational": {
-						"format": "double",
-						"type": "number"
-					},
-					"minAmountUsdExchange": {
-						"format": "double",
-						"type": "number"
-					},
-					"maxAmountUsdP2pTransaction": {
-						"format": "double",
-						"type": "number"
-					},
-					"accountType": {
-						"type": "string"
-					},
-					"flagCountryCode": {
-						"type": "string"
-					},
-					"limitAmountMovementUvt": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"currencyMain": {
-						"type": "boolean"
-					},
-					"minAmountUsdDeposit": {
-						"type": "number"
-					},
-					"maxAmountUsdWithdrawal": {
-						"format": "double",
-						"type": "number"
-					},
-					"checkDataAccount": {
-						"type": "string"
-					},
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"maxAmountUsdExchange": {
-						"format": "double",
-						"type": "number"
-					},
-					"balance": {
-						"$ref": "#/components/schemas/PG_Balance"
-					},
-					"maxAmountUsdDeposit": {
-						"type": "number"
-					},
-					"minAmountUsdWithdrawal": {
-						"format": "double",
-						"type": "number"
-					},
-					"rate": {
-						"format": "double",
-						"type": "number"
-					},
-					"countryCode": {
-						"type": "string"
-					},
-					"clientMain": {
-						"type": "boolean"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"minAmountUsdP2pTransaction": {
-						"format": "double",
-						"type": "number"
-					},
-					"slaHoursWithdrawal": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"accountBranch": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_MambuFieldsUpdate": {
-				"type": "object",
-				"properties": {
-					"originDiff": {
-						"type": "number"
-					},
-					"bankCode": {
-						"type": "string"
-					},
-					"statusTransactionConciliation": {
-						"type": "string",
-						"enum": [
-							"REVERSED",
-							"PENDING",
-							"CONCILIATED",
-							"RELEASED",
-							"PAID"
-						]
-					},
-					"destinationCurrencyCode": {
-						"type": "string"
-					},
-					"destinyAmount": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"bankMovementId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"banco": {
-						"type": "string",
-						"enum": [
-							"GALICIA_AR_ARS",
-							"PROVINCIA_AR_ARS",
-							"BBVA_ARG_ARS",
-							"SANTANDER_ARG_ARS",
-							"PATAGONIA_AR_ARS",
-							"RENDIMENTO_BR",
-							"MACH_CL_CLP",
-							"WEBPAY_CL_CLP",
-							"SCOTIABANK_CL_CLP",
-							"ITAU_CL_CLP",
-							"SANTANDER_CL_CLP",
-							"BNK_CHILE_CLP",
-							"BANCO_ESTADO_CL_CLP",
-							"ITAU_CL_CLP_2",
-							"DAVIVIENDA_COP",
-							"BANCOLOMBIA_COP",
-							"BNK_BOGOTA_COP",
-							"SOGEBANK_HT_HTG",
-							"BBVA_PE_PEN",
-							"NIUM",
-							"BANCO_INTERNACIONAL_EC_USD",
-							"SCOTIABANK_CL_USD",
-							"DLOCAL",
-							"WESEND_VE",
-							"DLOCAL_AR",
-							"NIUM_AUD",
-							"NIUM_BDT",
-							"THUNES_BOB",
-							"DLOCAL_BO",
-							"RENDIMENTO",
-							"DLOCAL_BR",
-							"MAMBU",
-							"DLOCAL_CL",
-							"NIUM_CNY",
-							"NIUM_COP",
-							"THUNES_COP",
-							"DLOCAL_CO",
-							"NIUM_CZK",
-							"NIUM_DKK",
-							"NIUM_EUR",
-							"NIUM_GBP",
-							"NIUM_HUF",
-							"NIUM_IDR",
-							"NIUM_INR",
-							"NIUM_LKR",
-							"DLOCAL_MX",
-							"PAYCASH",
-							"NIUM_MXN",
-							"NIUM_MYR",
-							"NIUM_NCY",
-							"NIUM_NOK",
-							"NIUM_NPR",
-							"DLOCAL_PE",
-							"IBK_PE_PEN",
-							"BCP_PEN",
-							"NIUM_PHP",
-							"NIUM_PLN",
-							"DLOCAL_PY",
-							"NIUM_RON",
-							"NIUM_SEK",
-							"NIUM_SGD",
-							"NIUM_THB",
-							"THUNES_USD",
-							"BCP_USD",
-							"WESEND_USD",
-							"IBK_PE_USD",
-							"BOLIVARIANO_EC_USD",
-							"DLOCAL_UY",
-							"NIUM_VND",
-							"WESEND",
-							"RENDIMENTO_USD",
-							"DLOCAL_USD",
-							"THUNES_BRL",
-							"THUNES_MXN",
-							"BBVA_CO_COP",
-							"BANCOLOMBIA_CO_COP",
-							"CFSB",
-							"BANCO_BCI_CL_CLP",
-							"FACILITAPAY_BR_BRL",
-							"GUAYAQUIL_EC_USD",
-							"BBVA_PE_USD",
-							"KUSHKI",
-							"BBVA_PE_PEN_ANDES",
-							"KHIPU"
-						]
-					},
-					"cashCallStatus": {
-						"type": "string",
-						"enum": [
-							"PENDING_VERIFICATION",
-							"VERIFIED",
-							"RELEASED",
-							"CANCELLED",
-							"REJECTED",
-							"PAID"
-						]
-					},
-					"type": {
-						"type": "string"
-					},
-					"creationDate": {
-						"type": "string"
-					},
-					"cancelledDate": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_MassiveMovementRes": {
-				"type": "object",
-				"properties": {
-					"serviceType": {
-						"type": "string"
-					},
-					"accountOriginId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"code": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"success": {
-						"type": "boolean"
-					},
-					"accountMassPaymentBeneficiars": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_AccountMassPaymentBeneficiar"
-						}
-					},
-					"message": {
-						"type": "string"
-					},
-					"operationIdentifierCode": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_GMoneyOperationCashInRS": {
-				"type": "object",
-				"properties": {
-					"result": {
-						"type": "boolean"
-					},
-					"expirationTime": {
-						"type": "string"
-					},
-					"fee": {
-						"format": "double",
-						"type": "number"
-					},
-					"errorCode": {
-						"type": "string"
-					},
-					"validationCode": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"transactionId": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_GMoneyOperationCashInRQ": {
-				"type": "object",
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"amount": {
-						"format": "double",
-						"type": "number"
-					},
-					"bankReference": {
-						"type": "string"
-					},
-					"referenceNumber": {
-						"type": "string"
-					},
-					"clientDeviceId": {
-						"type": "string"
-					},
-					"checksum": {
-						"type": "string"
-					},
-					"channelCode": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_CardId": {
-				"type": "object",
-				"properties": {
-					"cardId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_CardEmissionPayResponse": {
-				"type": "object",
-				"properties": {
-					"message": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_UpdateTransactionData": {
-				"type": "object",
-				"properties": {
-					"originDiff": {
-						"type": "number"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"businessBankCode": {
-						"type": "string"
-					},
-					"businessBankId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"productReference": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"costDto": {
-						"$ref": "#/components/schemas/PG_CostDto"
-					},
-					"externalReferenceId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"partnerIdReference": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"businessBankName": {
-						"type": "string"
-					},
-					"bankMovementId": {
-						"type": "string"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"refuseReason": {
-						"type": "string"
-					},
-					"status": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CashbackChangeStatusRequest": {
-				"type": "object",
-				"properties": {
-					"finalStatus": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"cashBackId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_CashBackInputResponse": {
-				"type": "object",
-				"properties": {
-					"amountCashBack": {
-						"type": "number"
-					},
-					"amountMin": {
-						"type": "number"
-					},
-					"cashInputData": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_CashInputData"
-						}
-					},
-					"redeem": {
-						"type": "boolean"
-					}
-				}
-			},
-			"PG_CashBackDto": {
-				"type": "object",
-				"properties": {
-					"lastFourDigits": {
-						"type": "string"
-					},
-					"cashBackAmount": {
-						"type": "number"
-					},
-					"currency": {
-						"type": "string"
-					},
-					"cashBackId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"purchaseCurrency": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"purchaseAmount": {
-						"type": "number"
-					},
-					"status": {
-						"type": "string",
-						"enum": [
-							"AVAILABLE",
-							"EX_CHANGED",
-							"REJECTED"
-						]
-					}
-				}
-			},
-			"PG_ControversyOperationsResponse": {
-				"type": "object",
-				"properties": {
-					"salesforceCaseId": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_GMoneyFindAccountRS": {
-				"type": "object",
-				"properties": {
-					"result": {
-						"type": "boolean"
-					},
-					"errorCode": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"transactionId": {
-						"type": "string"
-					},
-					"account": {
-						"$ref": "#/components/schemas/PG_GMoneyAccountData"
-					}
-				}
-			},
-			"PG_CardLimitsResponse": {
-				"type": "object",
-				"properties": {
-					"maxAmountCard": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"maxAmountMonthCard": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"statusData": {
-						"$ref": "#/components/schemas/PG_StatusData"
-					}
-				}
-			},
-			"PG_CardEmissionCostRequest": {
-				"type": "object",
-				"properties": {
-					"country": {
-						"type": "string"
-					},
-					"province": {
-						"type": "string"
-					},
-					"district": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_GMoneyRegisterAccountConfirmRS": {
-				"type": "object",
-				"properties": {
-					"result": {
-						"type": "boolean"
-					},
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"errorCode": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"transactionId": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_PinResponse": {
-				"type": "object",
-				"properties": {
-					"pin": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"status": {
-						"$ref": "#/components/schemas/PG_StatusData"
-					},
-					"attempts": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"timestamp": {
-						"format": "int64",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_P2pTransactionPurposeDto": {
-				"type": "object",
-				"properties": {
-					"p2pTransactionId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"purposeOriginNumeral": {
-						"type": "string"
-					},
-					"purpose": {
-						"type": "string"
-					},
-					"purposeDestinyNumeral": {
-						"type": "string"
-					},
-					"purposeCode": {
-						"type": "string"
-					},
-					"comment": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_GMoneyAccountUpgradeRQ": {
-				"type": "object",
-				"properties": {
-					"occupation": {
-						"type": "string"
-					},
-					"address": {
-						"type": "string"
-					},
-					"companyName": {
-						"type": "string"
-					},
-					"ubigeo": {
-						"type": "string"
-					},
-					"documentBack": {
-						"type": "string"
-					},
-					"isPep": {
-						"type": "boolean"
-					},
-					"documentFront": {
-						"type": "string"
-					},
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"institution": {
-						"type": "string"
-					},
-					"nationality": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"utilityBill": {
-						"type": "string"
-					},
-					"referenceNumber": {
-						"type": "string"
-					},
-					"selfie": {
-						"type": "string"
-					},
-					"clientDeviceId": {
-						"type": "string"
-					},
-					"checksum": {
-						"type": "string"
-					},
-					"spouseName": {
-						"type": "string"
-					},
-					"spouseDocumentNumber": {
-						"type": "string"
-					},
-					"position": {
-						"type": "string"
-					},
-					"residencePlace": {
-						"type": "string"
-					},
-					"maritalStatus": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"email": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_MovementRequest": {
-				"type": "object",
-				"properties": {
-					"typeList": {
-						"type": "array",
-						"items": {
-							"type": "string"
-						}
-					},
-					"statusList": {
-						"type": "array",
-						"items": {
-							"type": "string"
-						}
-					},
-					"currencyCodeList": {
-						"type": "array",
-						"items": {
-							"type": "string"
-						}
-					}
-				}
-			},
-			"PG_GMoneyUpdateAccountData": {
-				"type": "object",
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"referenceNumber": {
-						"type": "string"
-					},
-					"clientDeviceId": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"status": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_CardResponseActive": {
-				"type": "object",
-				"properties": {
-					"message": {
-						"type": "string"
-					},
-					"status": {
-						"$ref": "#/components/schemas/PG_StatusData"
-					}
-				}
-			},
-			"PG_GMoneyAccountData": {
-				"type": "object",
-				"properties": {
-					"accountID": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"firstName": {
-						"type": "string"
-					},
-					"phoneNumber": {
-						"type": "string"
-					},
-					"mail": {
-						"type": "string"
-					},
-					"documentType": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"documentNumber": {
-						"type": "string"
-					},
-					"registrationDate": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"lastName1": {
-						"type": "string"
-					},
-					"lastName2": {
-						"type": "string"
-					},
-					"status": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_ChargesPaymentsP2PData": {
-				"type": "object",
-				"properties": {
-					"versionType": {
-						"type": "string"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"displayName": {
-						"type": "string"
-					},
-					"checkData": {
-						"type": "string"
-					},
-					"promotionCode": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"discountAmount": {
-						"type": "number"
-					},
-					"p2pTransactionPurposeDto": {
-						"$ref": "#/components/schemas/PG_P2pTransactionPurposeDto"
-					},
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"response": {
-						"$ref": "#/components/schemas/PG_Response"
-					},
-					"contactNumber": {
-						"type": "string"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"processToken": {
-						"type": "string"
-					},
-					"exchange": {
-						"type": "boolean"
-					},
-					"discountAmountUsd": {
-						"type": "number"
-					},
-					"destinationAmount": {
-						"type": "number"
-					}
-				}
-			},
-			"PG_RequestGetCartola": {
-				"type": "object",
-				"properties": {
-					"month": {
-						"type": "string"
-					},
-					"year": {
-						"type": "string"
-					},
-					"cardId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"brandId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_CoreDepositReq": {
-				"type": "object",
-				"required": [
-					"accountId",
-					"amount",
-					"currencyCode",
-					"customerId",
-					"globalTransactionId",
-					"product"
-				],
-				"properties": {
-					"amount": {
-						"type": "number"
-					},
-					"product": {
-						"type": "string"
-					},
-					"businessBankCode": {
-						"type": "string"
-					},
-					"homeMovementType": {
-						"type": "string",
-						"enum": [
-							"P2P_PAYMENT",
-							"P2P_CHARGE",
-							"EXCHANGE",
-							"P2P_EXCHANGE_ADMIN",
-							"CASH_FLOW",
-							"REFUND",
-							"OTHER",
-							"AUTOMATIC_TX_FUND",
-							"AUTOMATIC_REFUND",
-							"CARD",
-							"REVERSED_CARD",
-							"CASH_IN_G81",
-							"CASH_OUT_G81",
-							"CASH_OUT_TO_GCARD",
-							"CASH_IN_FROM_GCARD",
-							"SEDPE_UPGRADE",
-							"REVERSED_MOVEMENT",
-							"BALANCE_TRANSFER",
-							"GMONEY_UPGRADE",
-							"CASH_BACK",
-							"CARD_ISSUE_SENT",
-							"CARD_ISSUE_RECEIVED",
-							"CARD_CASH_BACK_SENT",
-							"CARD_CASH_BACK_RECEIVED"
-						]
-					},
-					"businessBankId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"description": {
-						"type": "string"
-					},
-					"productReference": {
-						"type": "string"
-					},
-					"paymentType": {
-						"type": "string",
-						"enum": [
-							"PAYCASH",
-							"ONE_CLICK",
-							"WEBPAY",
-							"WIRE_TRANSFER",
-							"WALLET",
-							"VALE_VISTA"
-						]
-					},
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"globalTransactionId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"businessBankName": {
-						"type": "string"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"channelParameter": {
-						"type": "string",
-						"enum": [
-							"DEFAULT",
-							"CARD_ISSUE",
-							"CASH_BACK",
-							"COMMISSION",
-							"G81_TO_GC",
-							"GC_TO_G81",
-							"CARD_CONTROVERSY",
-							"BBVA_CO_COP",
-							"BANCOLOMBIA_COP",
-							"INTER_INSTANCE",
-							"KUSHKI",
-							"FEE",
-							"SAME_INSTANCE",
-							"IVA",
-							"GMF",
-							"COMISION_WEBPAY"
-						]
-					},
-					"paymentMethod": {
-						"type": "string"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"operation": {
-						"type": "string",
-						"enum": [
-							"P2P_PAYMENT_IN",
-							"P2P_PAYMENT_OUT",
-							"P2P_CHARGE_IN",
-							"P2P_CHARGE_OUT",
-							"CASH_IN",
-							"CASH_OUT",
-							"REMITTANCE_IN",
-							"REMITTANCE_OUT",
-							"EXCHANGE_IN",
-							"FEE",
-							"REMITTENCE"
-						]
-					}
-				}
-			},
-			"PG_AccountMassPaymentResponse": {
-				"type": "object",
-				"properties": {
-					"accountOriginId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"code": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"success": {
-						"type": "boolean"
-					},
-					"accountMassPaymentBeneficiars": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_AccountMassPaymentBeneficiaryResponse"
-						}
-					},
-					"message": {
-						"type": "string"
-					},
-					"operationIdentifierCode": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_LimitAmountData": {
-				"type": "object",
-				"properties": {
-					"accountGroupId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"countryCode": {
-						"type": "string"
-					},
-					"branchName": {
-						"type": "string"
-					},
-					"type": {
-						"type": "string"
-					},
-					"movement": {
-						"type": "string"
-					},
-					"value": {
-						"type": "number"
-					}
-				}
-			},
-			"PG_GMoneyAccountBalanceRS": {
-				"type": "object",
-				"properties": {
-					"result": {
-						"type": "boolean"
-					},
-					"balance": {
-						"format": "double",
-						"type": "number"
-					},
-					"errorCode": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"transactionId": {
-						"type": "string"
-					},
-					"limits": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_GMoneyBalanceLimitData"
-						}
-					}
-				}
-			},
-			"PG_LimitRs": {
-				"type": "object",
-				"properties": {
-					"isValid": {
-						"type": "boolean"
-					},
-					"details": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_LimitDetailRs"
-						}
-					}
-				}
-			},
-			"PG_PinPassRequest": {
-				"type": "object",
-				"properties": {
-					"confirmPin": {
-						"type": "string"
-					},
-					"pin": {
-						"type": "string"
-					},
-					"cardId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"attempts": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"timestamp": {
-						"format": "int64",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_ForgetPinPassRequest": {
-				"type": "object",
-				"required": [
-					"process",
-					"send"
-				],
-				"properties": {
-					"process": {
-						"pattern": "send|validation",
-						"type": "string"
-					},
-					"code": {
-						"type": "string"
-					},
-					"cardId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"validationType": {
-						"type": "string"
-					},
-					"event": {
-						"type": "string"
-					},
-					"send": {
-						"pattern": "email|phone",
-						"type": "string"
-					}
-				}
-			},
-			"PG_LimitDetailRs": {
-				"type": "object",
-				"properties": {
-					"gmf": {
-						"type": "number"
-					},
-					"maxAvailableBalance": {
-						"type": "number"
-					},
-					"minAvailableBalance": {
-						"type": "number"
-					},
-					"isLimitCompliant": {
-						"type": "boolean"
-					},
-					"limitType": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardKeyResponse": {
-				"type": "object",
-				"properties": {
-					"keyString": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_LocationInfoResponse": {
-				"type": "object",
-				"properties": {
-					"values": {
-						"type": "array",
-						"items": {
-							"type": "object"
-						}
-					},
-					"status": {
-						"$ref": "#/components/schemas/PG_StatusData"
-					}
-				}
-			},
-			"PG_AccountMassPaymentBeneficiaryResponse": {
-				"type": "object",
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"code": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"success": {
-						"type": "boolean"
-					},
-					"partnerId": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"transactionId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_TransactionChannel": {
-				"type": "object",
-				"properties": {
-					"instance": {
-						"type": "string"
-					},
-					"transactionChannelKey": {
-						"type": "string"
-					},
-					"transactionChannelId": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_DestinationAccount": {
-				"type": "object",
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"transactionId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_AccountUpgradeRQ": {
-				"type": "object",
-				"required": [
-					"accountId",
-					"address",
-					"companyName",
-					"documentBack",
-					"documentFront",
-					"isPep",
-					"maritalStatus",
-					"nationality",
-					"occupation",
-					"residencePlace",
-					"selfie",
-					"ubigeo",
-					"utilityBill"
-				],
-				"properties": {
-					"occupation": {
-						"type": "string"
-					},
-					"address": {
-						"type": "string"
-					},
-					"companyName": {
-						"type": "string"
-					},
-					"ubigeo": {
-						"type": "string"
-					},
-					"documentBack": {
-						"type": "string"
-					},
-					"isPep": {
-						"type": "boolean"
-					},
-					"documentFront": {
-						"type": "string"
-					},
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"institution": {
-						"type": "string"
-					},
-					"nationality": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"utilityBill": {
-						"type": "string"
-					},
-					"selfie": {
-						"type": "string"
-					},
-					"spouseName": {
-						"type": "string"
-					},
-					"spouseDocumentNumber": {
-						"type": "string"
-					},
-					"position": {
-						"type": "string"
-					},
-					"residencePlace": {
-						"type": "string"
-					},
-					"maritalStatus": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"email": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardRequestOutRM": {
-				"type": "object",
-				"properties": {
-					"rut": {
-						"type": "string"
-					},
-					"createdDate": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"phone": {
-						"type": "string"
-					},
-					"fullName": {
-						"type": "string"
-					},
-					"id": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"region": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardConciliationWLFilterDto": {
-				"type": "object",
-				"properties": {
-					"transactionType": {
-						"type": "string"
-					},
-					"amount": {
-						"format": "double",
-						"type": "number"
-					},
-					"rejectReason": {
-						"type": "string"
-					},
-					"transactionTypeId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"conciliationId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"conciliationStatus": {
-						"type": "string"
-					},
-					"countryCode": {
-						"type": "string"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"currency": {
-						"type": "string"
-					},
-					"transactionDate": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"transactionState": {
-						"type": "string",
-						"enum": [
-							"APPROVED",
-							"REJECTED",
-							"CANCELED",
-							"PENDING"
-						]
-					},
-					"transactionId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_LimitsCardRequest": {
-				"type": "object",
-				"required": [
-					"countryCode",
-					"typeProduct"
-				],
-				"properties": {
-					"typeProduct": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"countryCode": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardEventNotificationData": {
-				"type": "object",
-				"properties": {
-					"notification": {
-						"$ref": "#/components/schemas/PG_NotificationData"
-					}
-				}
-			},
-			"PG_CostDto": {
-				"type": "object",
-				"properties": {
-					"fundCost3Type": {
-						"type": "string",
-						"enum": [
-							"PERCENTAGE",
-							"FIXED"
-						]
-					},
-					"paymentCost3Value": {
-						"type": "number"
-					},
-					"fundCost3Desc": {
-						"type": "string"
-					},
-					"paymentCost1Type": {
-						"type": "string",
-						"enum": [
-							"PERCENTAGE",
-							"FIXED"
-						]
-					},
-					"fundCost1Value": {
-						"type": "number"
-					},
-					"fundCost1Type": {
-						"type": "string",
-						"enum": [
-							"PERCENTAGE",
-							"FIXED"
-						]
-					},
-					"fundCost1Desc": {
-						"type": "string"
-					},
-					"fundCost3Value": {
-						"type": "number"
-					},
-					"paymentCost2Value": {
-						"type": "number"
-					},
-					"paymentCost3Type": {
-						"type": "string",
-						"enum": [
-							"PERCENTAGE",
-							"FIXED"
-						]
-					},
-					"paymentCost2Desc": {
-						"type": "string"
-					},
-					"fundCost2Value": {
-						"type": "number"
-					},
-					"fundCost2Desc": {
-						"type": "string"
-					},
-					"paymentCost1Value": {
-						"type": "number"
-					},
-					"fundCost2Type": {
-						"type": "string",
-						"enum": [
-							"PERCENTAGE",
-							"FIXED"
-						]
-					},
-					"paymentCost1Desc": {
-						"type": "string"
-					},
-					"paymentCost2Type": {
-						"type": "string",
-						"enum": [
-							"PERCENTAGE",
-							"FIXED"
-						]
-					},
-					"paymentCost3Desc": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_SendMoneyTxResponse": {
-				"type": "object",
-				"properties": {
-					"migrationEventKey": {
-						"type": "string"
-					},
-					"originalTransactionKey": {
-						"type": "string"
-					},
-					"transactionDetailData": {
-						"$ref": "#/components/schemas/PG_TransactionChannel"
-					},
-					"amount": {
-						"type": "string"
-					},
-					"accountBranchName": {
-						"type": "string",
-						"enum": [
-							"GLOBAL_81",
-							"GLOBAL_CARD",
-							"GLOBAL_SEDPE",
-							"GLOBAL_USA",
-							"GLOBAL_PERU",
-							"B2B_GLOBAL_81"
-						]
-					},
-					"notes": {
-						"type": "string"
-					},
-					"centreKey": {
-						"type": "string"
-					},
-					"externalId": {
-						"type": "string"
-					},
-					"valueDate": {
-						"type": "string"
-					},
-					"creationDate": {
-						"type": "string"
-					},
-					"userKey": {
-						"type": "string"
-					},
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"walletRegular": {
-						"type": "boolean"
-					},
-					"parentAccountKey": {
-						"type": "string"
-					},
-					"accountBalances": {
-						"$ref": "#/components/schemas/PG_AccountBalanceData"
-					},
-					"clientMain": {
-						"type": "boolean"
-					},
-					"paymentOrderId": {
-						"type": "string"
-					},
-					"encodedKey": {
-						"type": "string"
-					},
-					"bookingDate": {
-						"type": "string"
-					},
-					"id": {
-						"type": "string"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"sendMoneyTransaction": {
-						"$ref": "#/components/schemas/PG_SendMoneyTransaction"
-					}
-				}
-			},
-			"PG_RequestCardCreate": {
-				"type": "object",
-				"properties": {
-					"typeProduct": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"brand": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"addressCorrespondence": {
-						"$ref": "#/components/schemas/PG_RequestCardCreateCorrespondence"
-					}
-				}
-			},
-			"PG_GMoneyMasterChannelsRS": {
-				"type": "object",
-				"properties": {
-					"result": {
-						"type": "boolean"
-					},
-					"channels": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_GMoneyMasterChannelsData"
-						}
-					},
-					"errorCode": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"transactionId": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CoreFeeData": {
-				"type": "object",
-				"properties": {
-					"amount": {
-						"type": "string"
-					},
-					"notes": {
-						"type": "string"
-					},
-					"predefinedFeeKey": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardStatusResponse": {
-				"type": "object",
-				"properties": {
-					"statusCard": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"description": {
-						"type": "string"
-					},
-					"status": {
-						"$ref": "#/components/schemas/PG_StatusData"
-					}
-				}
-			},
-			"PG_AccountDto": {
-				"type": "object",
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"clientMain": {
-						"type": "boolean"
-					},
-					"accountGroup": {
-						"$ref": "#/components/schemas/PG_AccountGroupDto"
-					},
-					"currencyMain": {
-						"type": "boolean"
-					},
-					"customer": {
-						"$ref": "#/components/schemas/PG_CustomerDto"
-					}
-				}
-			},
-			"PG_CardCostDto": {
-				"type": "object",
-				"properties": {
-					"cardCost": {
-						"type": "number"
-					},
-					"cardCostId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"currencyCode": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_AccountCard": {
-				"type": "object",
-				"properties": {
-					"cardReferenceToken": {
-						"type": "string"
-					},
-					"nameTypeProduct": {
-						"type": "string"
-					},
-					"cardId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"estadoDescripcion": {
-						"type": "string"
-					},
-					"brand": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"estadoCodigo": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_CustomerDto": {
-				"type": "object",
-				"properties": {
-					"firstName": {
-						"type": "string"
-					},
-					"lastName": {
-						"type": "string"
-					},
-					"countryCode": {
-						"type": "string"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"email": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_AccountGroupDto": {
-				"type": "object",
-				"properties": {
-					"countryCode": {
-						"type": "string"
-					},
-					"currencySymbol": {
-						"type": "string"
-					},
-					"currencyCode": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_ChangeAccountTypeReq": {
-				"type": "object",
-				"required": [
-					"customerId"
-				],
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					}
-				}
-			},
-			"PG_GMoneyMasterMovementsRS": {
-				"type": "object",
-				"properties": {
-					"result": {
-						"type": "boolean"
-					},
-					"errorCode": {
-						"type": "string"
-					},
-					"movements": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_GMoneyMasterMovementData"
-						}
-					},
-					"movements2": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_GMoneyMasterMovementData"
-						}
-					},
-					"message": {
-						"type": "string"
-					},
-					"transactionId": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_GMoneyOperationCashOutRQ": {
-				"type": "object",
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"amount": {
-						"format": "double",
-						"type": "number"
-					},
-					"bankAccountType": {
-						"type": "string"
-					},
-					"bankAccountHolderName": {
-						"type": "string"
-					},
-					"referenceNumber": {
-						"type": "string"
-					},
-					"clientDeviceId": {
-						"type": "string"
-					},
-					"checksum": {
-						"type": "string"
-					},
-					"bankAccountNumber": {
-						"type": "string"
-					},
-					"bankAccountDocNumber": {
-						"type": "string"
-					},
-					"channelCode": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"bankAccountDocType": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_RequestGetIdCustomer": {
-				"type": "object",
-				"properties": {
-					"idNumberType": {
-						"type": "string"
-					},
-					"idNumber": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_TermAndConditionResponseDto": {
-				"type": "object",
-				"properties": {
-					"acknowledgeText": {
-						"type": "string"
-					},
-					"countryCode": {
-						"type": "string"
-					},
-					"companyName": {
-						"type": "string"
-					},
-					"details": {
-						"$ref": "#/components/schemas/PG_Details"
-					},
-					"title": {
-						"type": "string"
-					},
-					"brand": {
-						"type": "string",
-						"enum": [
-							"MASTERCARD",
-							"VISA"
-						]
-					}
-				}
-			},
-			"PG_AccountCustomerRequest": {
-				"type": "object",
-				"properties": {
-					"customerIdList": {
-						"type": "array",
-						"items": {
-							"format": "int32",
-							"type": "integer"
-						}
-					},
-					"currencyCode": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_Movement": {
-				"type": "object",
-				"properties": {
-					"date": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"slaDeadlineDateMillis": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"webpayOriginDiff": {
-						"type": "number"
-					},
-					"codCommerce": {
-						"type": "string"
-					},
-					"voucher": {
-						"type": "boolean"
-					},
-					"originCurrency": {
-						"type": "string"
-					},
-					"destinyAmount": {
-						"type": "number"
-					},
-					"discountAmount": {
-						"type": "number"
-					},
-					"type": {
-						"type": "string"
-					},
-					"destinyRoute": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"wayTransfer": {
-						"type": "string"
-					},
-					"id": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"originRoute": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"specialFunding": {
-						"type": "boolean"
-					},
-					"originAlphaCode": {
-						"type": "string"
-					},
-					"destinyCurrency": {
-						"type": "string"
-					},
-					"originAmountUsd": {
-						"type": "number"
-					},
-					"nameCommerce": {
-						"type": "string"
-					},
-					"paymentMethod": {
-						"type": "string"
-					},
-					"comment": {
-						"type": "string"
-					},
-					"partnerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"slaDeadlineDate": {
-						"format": "date-time",
-						"type": "string"
-					},
-					"status": {
-						"type": "string"
-					},
-					"otherUser": {
-						"additionalProperties": {
-							"type": "object"
-						},
-						"type": "object"
-					},
-					"beneficiaryId": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"commissionAmount": {
-						"type": "number"
-					}
-				}
-			},
-			"PG_GMoneyBalanceLimitData": {
-				"type": "object",
-				"properties": {
-					"transactionType": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"currentAmountInPeriod": {
-						"format": "double",
-						"type": "number"
-					},
-					"currentQuantityInPeriod": {
-						"format": "double",
-						"type": "number"
-					},
-					"maxAmountInPeriod": {
-						"format": "double",
-						"type": "number"
-					},
-					"maxQuantityInPeriod": {
-						"format": "double",
-						"type": "number"
-					}
-				}
-			},
-			"PG_TransactionResponseData": {
-				"type": "object",
-				"properties": {
-					"customerBankAccount": {
-						"$ref": "#/components/schemas/PG_CustomerBankAccount"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"amountUSD": {
-						"type": "number"
-					},
-					"voucherStorageLink": {
-						"type": "string"
-					},
-					"createdDateMillis": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"description": {
-						"type": "string"
-					},
-					"type": {
-						"type": "string",
-						"enum": [
-							"DEPOSIT",
-							"WITHDRAWAL"
-						]
-					},
-					"paidDateMillis": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"transactionId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"voucherDateMillis": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"rejectedReason": {
-						"type": "string"
-					},
-					"paymentMethodValue": {
-						"type": "string"
-					},
-					"paymentMethod": {
-						"type": "string",
-						"enum": [
-							"PAYCASH",
-							"ONE_CLICK",
-							"WEBPAY",
-							"WIRE_TRANSFER",
-							"WALLET",
-							"VALE_VISTA"
-						]
-					},
-					"currency": {
-						"type": "string"
-					},
-					"rejectedDateMillis": {
-						"format": "int64",
-						"type": "integer"
-					},
-					"status": {
-						"type": "string",
-						"enum": [
-							"PENDING_VERIFICATION",
-							"VERIFIED",
-							"RELEASED",
-							"CANCELLED",
-							"REJECTED",
-							"PAID"
-						]
-					}
-				}
-			},
-			"PG_LimitDataDetail": {
-				"description": "List of limits applied in the validation.",
-				"type": "object",
-				"required": [
-					"calculatedAmount",
-					"isLimitCompliant",
-					"limitType",
-					"lowerLimit",
-					"upperLimit"
-				],
-				"properties": {
-					"calculatedAmount": {
-						"description": "Calculated amount used in the validation.",
-						"type": "number",
-						"example": 10.0
-					},
-					"upperLimit": {
-						"description": "Upper limit amount used in validation.",
-						"type": "number",
-						"example": 20.0
-					},
-					"lowerLimit": {
-						"description": "Lower limit amount used in validation.",
-						"type": "number",
-						"example": 10.0
-					},
-					"isLimitCompliant": {
-						"description": "Limit applied validation flag.",
-						"type": "boolean",
-						"example": true
-					},
-					"limitType": {
-						"description": "Limit type used in the validation.",
-						"type": "string",
-						"enum": [
-							"DAILY",
-							"WEEKLY",
-							"MONTHLY",
-							"YEARLY",
-							"BY_TRANSACTION",
-							"MONTHLY_BY_BALANCE",
-							"MONTHLY_BY_SUM_TRANSACTIONS",
-							"BY_DAYS",
-							"ACCOUNT_MIGRATION",
-							"REMITTENCE",
-							"GENERAL_TRANSACTION_LIMIT"
-						]
-					}
-				}
-			},
-			"PG_CardWhiteListSaveRequest": {
-				"type": "object",
-				"required": [
-					"customerType",
-					"email",
-					"rightGuess"
-				],
-				"properties": {
-					"customerType": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"rightGuess": {
-						"type": "boolean"
-					},
-					"enrollmentDate": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardConciliationWLDto": {
-				"type": "object",
-				"properties": {
-					"transactionType": {
-						"type": "string"
-					},
-					"transactionTypeId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"countTotal": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"transactionState": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_TransactionState"
-						}
-					}
-				}
-			},
-			"PG_DepositData": {
-				"type": "object",
-				"required": [
-					"amount",
-					"businessBankCode",
-					"businessBankId",
-					"businessBankName",
-					"currencyCode",
-					"customerEmail",
-					"customerId",
-					"product"
-				],
-				"properties": {
-					"originDiff": {
-						"type": "number"
-					},
-					"amount": {
-						"type": "number"
-					},
-					"product": {
-						"type": "string"
-					},
-					"businessBankCode": {
-						"type": "string"
-					},
-					"businessBankId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"description": {
-						"type": "string"
-					},
-					"productReference": {
-						"type": "string"
-					},
-					"advertisingId": {
-						"type": "string"
-					},
-					"deviceCode": {
-						"type": "string"
-					},
-					"paymentType": {
-						"type": "string",
-						"enum": [
-							"PAYCASH",
-							"ONE_CLICK",
-							"WEBPAY",
-							"WIRE_TRANSFER",
-							"WALLET",
-							"VALE_VISTA"
-						]
-					},
-					"costDto": {
-						"$ref": "#/components/schemas/PG_CostDto"
-					},
-					"externalReferenceId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"appsFlyerId": {
-						"type": "string"
-					},
-					"businessBankName": {
-						"type": "string"
-					},
-					"customerEmail": {
-						"type": "string"
-					},
-					"customerId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"bankMovementId": {
-						"type": "string"
-					},
-					"paymentMethod": {
-						"type": "string"
-					},
-					"processToken": {
-						"type": "string"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"device": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_MassPaymentReq": {
-				"type": "object",
-				"required": [
-					"amount",
-					"destinationAccountIds",
-					"globalTransactionId",
-					"operation",
-					"originAccountId",
-					"paymentDescription",
-					"transactionChannel"
-				],
-				"properties": {
-					"amount": {
-						"type": "number"
-					},
-					"transactionChannel": {
-						"type": "string"
-					},
-					"globalTransactionId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"originAccountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"destinationAccountIds": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/PG_DestinationAccount"
-						}
-					},
-					"operation": {
-						"type": "string",
-						"enum": [
-							"P2P_PAYMENT_IN",
-							"P2P_PAYMENT_OUT",
-							"P2P_CHARGE_IN",
-							"P2P_CHARGE_OUT",
-							"CASH_IN",
-							"CASH_OUT",
-							"REMITTANCE_IN",
-							"REMITTANCE_OUT",
-							"EXCHANGE_IN",
-							"FEE",
-							"REMITTENCE"
-						]
-					},
-					"paymentDescription": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_CardWhiteListSaveResponse": {
-				"type": "object",
-				"properties": {
-					"message": {
-						"type": "string"
-					},
-					"status": {
-						"type": "string"
-					}
-				}
-			},
-			"PG_AccountBeneficiaryData": {
-				"type": "object",
-				"properties": {
-					"accountId": {
-						"format": "int32",
-						"type": "integer"
-					},
-					"isCurrencyMain": {
-						"type": "boolean"
-					},
-					"isClientMain": {
-						"type": "boolean"
-					},
-					"countryCode": {
-						"type": "string"
-					},
-					"accountType": {
-						"type": "string"
-					},
-					"flagCountryCode": {
-						"type": "string"
-					},
-					"currencyCode": {
-						"type": "string"
-					},
-					"accountBranch": {
-						"type": "string"
-					}
-				}
-			}
-		},
-		"securitySchemes": {
-			"Customer-Authorization": {
-				"in": "header",
-				"name": "Authorization",
-				"type": "apiKey"
-			},
-			"Admin-Authorization": {
-				"in": "header",
-				"name": "Authorization",
-				"type": "apiKey"
-			}
-		}
-	},
-	"servers": [
-		{
-			"description": "CORE",
-			"url": "https://rv5j3l8pd9.execute-api.us-east-1.amazonaws.com"
-		}
-	],
-	"openapi": "3.0.1",
-	"paths": {
-		"/v1/account/withdraw": {
-			"post": {
-				"summary": "Withdrawal",
-				"security": [],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PG_CoreWithdrawalReq"
-							}
-						}
-					},
-					"required": true
-				},
-				"description": "Withdrawal operation to the account",
-				"operationId": "withdraw",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"$ref": "#/components/schemas/PG_SendMoneyTxResponse"
-								}
-							}
-						}
-					}
-				},
-				"parameters": [],
-				"tags": [
-					"Operation"
-				]
-			}
-		},
-		"/v1/accounts/upgrade": {
-			"post": {
-				"summary": "Upgrade",
-				"security": [],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PG_AccountUpgradeRQ"
-							}
-						}
-					},
-					"required": true
-				},
-				"deprecated": true,
-				"description": "Change the account from Simplified Regime to General in Gmoney",
-				"operationId": "upgradeGMoneyAccount",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"type": "string"
-								}
-							}
-						}
-					}
-				},
-				"parameters": [],
-				"tags": [
-					"Account"
-				]
-			}
-		},
-		"/v1/account/mass-payment": {
-			"post": {
-				"summary": "Mass Payment",
-				"security": [],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PG_MassPaymentReq"
-							}
-						}
-					},
-					"required": true
-				},
-				"description": "Massive payment",
-				"operationId": "massPayment",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"$ref": "#/components/schemas/PG_AccountMassPaymentResponse"
-								}
-							}
-						}
-					}
-				},
-				"parameters": [],
-				"tags": [
-					"Operation"
-				]
-			}
-		},
-		"/v1/limit/validate": {
-			"get": {
-				"summary": "Validate",
-				"security": [],
-				"description": "Validates transaction against configured limits",
-				"operationId": "validate",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"$ref": "#/components/schemas/PG_LimitDataResponse"
-								}
-							}
-						}
-					}
-				},
-				"parameters": [
-					{
-						"schema": {
-							"format": "int32",
-							"type": "integer"
-						},
-						"in": "query",
-						"name": "accountId",
-						"description": "Account Id on which the operation is being executed.",
-						"required": true,
-						"example": 777
-					},
-					{
-						"schema": {
-							"type": "number"
-						},
-						"in": "query",
-						"name": "amount",
-						"description": "Amount to be validated.",
-						"required": true,
-						"example": 100.0
-					},
-					{
-						"schema": {
-							"type": "string",
-							"enum": [
-								"P2P_PAYMENT_IN",
-								"P2P_PAYMENT_OUT",
-								"P2P_CHARGE_IN",
-								"P2P_CHARGE_OUT",
-								"CASH_IN",
-								"CASH_OUT",
-								"REMITTANCE_IN",
-								"REMITTANCE_OUT",
-								"EXCHANGE_IN",
-								"FEE",
-								"REMITTENCE"
-							]
-						},
-						"in": "query",
-						"name": "operation",
-						"description": "Operation type to be validated.",
-						"required": true
-					},
-					{
-						"schema": {
-							"type": "string"
-						},
-						"in": "query",
-						"name": "monthStartDate",
-						"description": "month start date",
-						"required": false,
-						"example": "yyyy-MM-dd"
-					},
-					{
-						"schema": {
-							"default": false,
-							"type": "boolean"
-						},
-						"in": "query",
-						"name": "isRemittence",
-						"description": "if is true, remittence validation flow is excecuted",
-						"required": false
-					},
-					{
-						"schema": {
-							"type": "string"
-						},
-						"in": "query",
-						"name": "remittenceProduct",
-						"description": "Remittence product type",
-						"required": false
-					}
-				],
-				"tags": [
-					"Limit"
-				]
-			}
-		},
-		"/v1/accounts/account/close": {
-			"get": {
-				"summary": "Close",
-				"security": [],
-				"description": "dynamic filter to get list of accounts",
-				"operationId": "closeAccount_2",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"type": "string"
-								}
-							}
-						}
-					}
-				},
-				"parameters": [
-					{
-						"schema": {
-							"format": "int32",
-							"type": "integer"
-						},
-						"in": "query",
-						"name": "accountId",
-						"required": true
-					}
-				],
-				"tags": [
-					"Account"
-				]
-			}
-		},
-		"/v1/gmoney/healt-check": {
-			"get": {
-				"summary": "Healt Check",
-				"security": [],
-				"description": "Check that the connection with Gmoney is active for the use of the vpn",
-				"operationId": "healtCheck",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"type": "string"
-								}
-							}
-						}
-					}
-				},
-				"parameters": [
-					{
-						"schema": {
-							"type": "string"
-						},
-						"in": "query",
-						"name": "host",
-						"required": true
-					}
-				],
-				"tags": [
-					"Gmoney"
-				]
-			}
-		},
-		"/v1/accounts/upgrade/regulated/co": {
-			"put": {
-				"summary": "Upgrade Sedpe",
-				"security": [],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PG_ChangeAccountTypeReq"
-							}
-						}
-					},
-					"required": true
-				},
-				"description": "Change the account from Simplified to Ordinary and remove the limits",
-				"operationId": "upgradeAccountSedpe",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"type": "string"
-								}
-							}
-						}
-					}
-				},
-				"parameters": [],
-				"tags": [
-					"Account"
-				]
-			}
-		},
-		"/v1/limit": {
-			"post": {
-				"summary": "Create Limit",
-				"security": [
-					{
-						"Admin-Authorization": []
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PG_LimitDto"
-							}
-						}
-					},
-					"required": true
-				},
-				"description": "Creates a new Limit.",
-				"operationId": "createLimit",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"$ref": "#/components/schemas/PG_LimitDtoResponse"
-								}
-							}
-						}
-					}
-				},
-				"parameters": [],
-				"tags": [
-					"Limit"
-				]
-			},
-			"get": {
-				"summary": "Gets all limits configured",
-				"security": [
-					{
-						"Admin-Authorization": []
-					}
-				],
-				"description": "Get all the limits configured in the product-gateway database",
-				"operationId": "getAll",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/PG_LimitDtoResponse"
-									}
-								}
-							}
-						}
-					}
-				},
-				"parameters": [],
-				"tags": [
-					"Limit"
-				]
-			},
-			"delete": {
-				"summary": "Delete Limit",
-				"security": [
-					{
-						"Admin-Authorization": []
-					}
-				],
-				"description": "Delete a limit by ID. The id is made up of Group ID, Operation Type, Limit Type",
-				"operationId": "deleteLimit",
-				"responses": {
-					"200": {
-						"description": "OK"
-					}
-				},
-				"parameters": [
-					{
-						"schema": {
-							"format": "int32",
-							"type": "integer"
-						},
-						"in": "query",
-						"name": "accountGroupId",
-						"description": "Account group Id used to configure the limit.",
-						"required": true,
-						"example": 777
-					},
-					{
-						"schema": {
-							"type": "string",
-							"enum": [
-								"P2P_PAYMENT_IN",
-								"P2P_PAYMENT_OUT",
-								"P2P_CHARGE_IN",
-								"P2P_CHARGE_OUT",
-								"CASH_IN",
-								"CASH_OUT",
-								"REMITTANCE_IN",
-								"REMITTANCE_OUT",
-								"EXCHANGE_IN",
-								"FEE",
-								"REMITTENCE"
-							]
-						},
-						"in": "query",
-						"name": "operation",
-						"description": "Operation type configured for the limit.",
-						"required": true
-					},
-					{
-						"schema": {
-							"type": "string",
-							"enum": [
-								"DAILY",
-								"WEEKLY",
-								"MONTHLY",
-								"YEARLY",
-								"BY_TRANSACTION",
-								"MONTHLY_BY_BALANCE",
-								"MONTHLY_BY_SUM_TRANSACTIONS",
-								"BY_DAYS",
-								"ACCOUNT_MIGRATION",
-								"REMITTENCE",
-								"GENERAL_TRANSACTION_LIMIT"
-							]
-						},
-						"in": "query",
-						"name": "limitType",
-						"description": "Limit type configured for the limit.",
-						"required": true
-					}
-				],
-				"tags": [
-					"Limit"
-				]
-			}
-		},
-		"/v1/account/deposit": {
-			"post": {
-				"summary": "Deposit Account",
-				"security": [],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PG_CoreDepositReq"
-							}
-						}
-					},
-					"required": true
-				},
-				"description": "Deposit operation to the account",
-				"operationId": "depositAccount",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"$ref": "#/components/schemas/PG_SendMoneyTxResponse"
-								}
-							}
-						}
-					}
-				},
-				"parameters": [],
-				"tags": [
-					"Operation"
-				]
-			}
-		},
-		"/v1/limit/{accountGroupId}/{operation}/{limitType}": {
-			"get": {
-				"summary": "Get By LimitId",
-				"security": [
-					{
-						"Admin-Authorization": []
-					}
-				],
-				"description": "Gets all limits configured",
-				"operationId": "getByLimitId",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"$ref": "#/components/schemas/PG_LimitDtoResponse"
-								}
-							}
-						}
-					}
-				},
-				"parameters": [
-					{
-						"schema": {
-							"format": "int32",
-							"type": "integer"
-						},
-						"in": "path",
-						"name": "accountGroupId",
-						"description": "Account group Id used to configure the limit.",
-						"required": true,
-						"example": 777
-					},
-					{
-						"schema": {
-							"type": "string",
-							"enum": [
-								"P2P_PAYMENT_IN",
-								"P2P_PAYMENT_OUT",
-								"P2P_CHARGE_IN",
-								"P2P_CHARGE_OUT",
-								"CASH_IN",
-								"CASH_OUT",
-								"REMITTANCE_IN",
-								"REMITTANCE_OUT",
-								"EXCHANGE_IN",
-								"FEE",
-								"REMITTENCE"
-							]
-						},
-						"in": "path",
-						"name": "operation",
-						"description": "Operation type configured for the limit.",
-						"required": true
-					},
-					{
-						"schema": {
-							"type": "string",
-							"enum": [
-								"DAILY",
-								"WEEKLY",
-								"MONTHLY",
-								"YEARLY",
-								"BY_TRANSACTION",
-								"MONTHLY_BY_BALANCE",
-								"MONTHLY_BY_SUM_TRANSACTIONS",
-								"BY_DAYS",
-								"ACCOUNT_MIGRATION",
-								"REMITTENCE",
-								"GENERAL_TRANSACTION_LIMIT"
-							]
-						},
-						"in": "path",
-						"name": "limitType",
-						"description": "Limit type configured for the limit.",
-						"required": true
-					}
-				],
-				"tags": [
-					"Limit"
-				]
-			}
-		},
-		"/v1/accounts/account": {
-			"post": {
-				"summary": "Account",
-				"security": [],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PG_CreateAccountData"
-							}
-						}
-					},
-					"required": true
-				},
-				"description": "Create the client and the account in Mambu. When they are accounts from Peru, create the client in Gmoney",
-				"operationId": "createDepositAccounts_2",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"$ref": "#/components/schemas/PG_AccountResponse"
-								}
-							}
-						}
-					}
-				},
-				"parameters": [],
-				"tags": [
-					"Account"
-				]
-			}
-		},
-		"/v1/accounts/account/list-account": {
-			"get": {
-				"summary": "ListAccount",
-				"security": [],
-				"description": "dynamic filter to get list of accounts",
-				"operationId": "getAllAccountsByFilter",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"$ref": "#/components/schemas/PG_AccountDataDto"
-									}
-								}
-							}
-						}
-					}
-				},
-				"parameters": [
-					{
-						"schema": {
-							"format": "int32",
-							"type": "integer"
-						},
-						"in": "query",
-						"name": "page",
-						"required": false
-					},
-					{
-						"schema": {
-							"format": "int32",
-							"type": "integer"
-						},
-						"in": "query",
-						"name": "size",
-						"required": false
-					},
-					{
-						"schema": {
-							"type": "string"
-						},
-						"in": "query",
-						"name": "query",
-						"required": false
-					}
-				],
-				"tags": [
-					"Account"
-				]
-			}
-		},
-		"/v1/accounts/upgrade/regulated/pe": {
-			"put": {
-				"summary": "Upgrade",
-				"security": [],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PG_AccountUpgradeRQ"
-							}
-						}
-					},
-					"required": true
-				},
-				"description": "Change the account from Simplified Regime to General in Gmoney",
-				"operationId": "upgradeGMoneyAccountPeru",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"*/*": {
-								"schema": {
-									"type": "string"
-								}
-							}
-						}
-					}
-				},
-				"parameters": [],
-				"tags": [
-					"Account"
-				]
-			}
-		}
-	},
-	"info": {
-		"description": "Microservice that orchestrates all wallet-related requests",
-		"title": "Product Gateway",
-		"version": "1.0"
-	}
-}
+swagger: '2.0'
+host: crt.ecodig.bci.cl
+info:
+  description: Swagger specification for Consent's APIs.
+  version: '2'
+  title: API Consents
+basePath: /v2/api-consents/
+schemes:
+  - https
+produces:
+  - application/json
+paths:
+  /configurations/products/parameters:
+    post:
+      tags:
+        - Product
+      summary: Get initial parameter to setup product consent
+      operationId: getProductParameters
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: ParametersReq
+          required: true
+          schema:
+            $ref: '#/definitions/ProductParametersReq'
+        - in: header
+          name: x-apikey
+          type: string
+          required: true
+          description: >-
+            Value of the Api Key assigned to the application
+        - in: header
+          name: Referer
+          type: string
+          required: true
+          description: >-
+            URL from where the request is made
+      responses:
+        '200':
+          description: Successfull
+          schema:
+            $ref: '#/definitions/ProductParametersRsp'
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+        '400':
+          description: Bad Request
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '401':
+          description: Unauthorized
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '403':
+          description: Unauthorized
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '409':
+          description: Conflict
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '429':
+          description: Too many request
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+
+        '500':
+          description: Internal Server Error
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+  /consents/{consentID}:
+    get:
+      tags:
+        - Consents
+      summary: Obtain detailed information about a consent made for a customer
+      operationId: getConsentById
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: consentID
+          description: Consent Identification ID
+          required: true
+          type: string
+        - in: header
+          name: x-apikey
+          type: string
+          required: true
+          description: >-
+            Value of the Api Key assigned to the application
+        - in: header
+          name: Referer
+          type: string
+          required: true
+          description: >-
+            URL from where the request is made
+      responses:
+        '200':
+          description: Successfull
+          schema:
+            $ref: '#/definitions/ConsentRsp'
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+        '400':
+          description: Bad Request
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '401':
+          description: Unauthorized
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '403':
+          description: Unauthorized
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '404':
+          description: Not Found
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '409':
+          description: Conflict
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '429':
+          description: Too many request
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+
+        '500':
+          description: Internal Server Error
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+    patch:
+      tags:
+        - Consents
+      summary: Update a Permission Status associated to an Consent by Id
+      description: 'Update aStatus associated to an Consent by Id '
+      operationId: updateConsentStatus
+      parameters:
+        - name: consentID
+          in: path
+          description: Consent Identification ID
+          required: true
+          type: string
+        - name: updateConsentRequest
+          in: body
+          description: Consent Identification and status
+          required: true
+          schema:
+            $ref: '#/definitions/ConsentStatusRequest'
+        - in: header
+          name: x-apikey
+          type: string
+          required: true
+          description: >-
+            Value of the Api Key assigned to the application
+        - in: header
+          name: Referer
+          type: string
+          required: true
+          description: >-
+            URL from where the request is made
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ConsentRsp'
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+        '400':
+          description: Bad Request
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '401':
+          description: Unauthorized
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '403':
+          description: Forbidden
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '404':
+          description: Not Found
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '429':
+          description: Too Many Requests
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '500':
+          description: Internal Server Error
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+      x-version: '1'
+      x-scopes:
+        - 'consents.accessCount:update'
+  /consents/search:
+    post:
+      tags:
+        - Consents
+      summary: Get a Consent by Request ID & Cosumer ID
+      description: Obtain detailed information about a last consent created made for a customer
+      operationId: getConsentByConsumer
+      parameters:
+        - in: body
+          name: ConsentRequest
+          required: true
+          schema:
+            $ref: '#/definitions/ConsentRequest'
+        - in: header
+          name: x-apikey
+          type: string
+          required: true
+          description: >-
+            Value of the Api Key assigned to the application
+        - in: header
+          name: Referer
+          type: string
+          required: true
+          description: >-
+            URL from where the request is made
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ConsentRsp'
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+        '400':
+          description: Bad Request
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '401':
+          description: Unauthorized
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '403':
+          description: Forbidden
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '404':
+          description: Not Found
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '409':
+          description: Conflict
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '429':
+          description: Too Many Requests
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '500':
+          description: Internal Server Error
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+      x-version: '1'
+  /consents/list:
+    post:
+      tags:
+        - Consents
+      summary: Get a Consent by Request ID & Cosumer ID
+      description: Obtain detailed information about a last consent created made for a customer
+      operationId: getConsents
+      parameters:
+        - in: body
+          name: ConsentsRequest
+          required: true
+          schema:
+            $ref: '#/definitions/ConsentsRequest'
+        - in: header
+          name: x-apikey
+          type: string
+          required: true
+          description: >-
+            Value of the Api Key assigned to the application
+        - in: header
+          name: Referer
+          type: string
+          required: true
+          description: >-
+            URL from where the request is made
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ConsentsRsp'
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+        '400':
+          description: Bad Request
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '401':
+          description: Unauthorized
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '403':
+          description: Forbidden
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '404':
+          description: Not Found
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '409':
+          description: Conflict
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payloa.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '429':
+          description: Too Many Requests
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+        '500':
+          description: Internal Server Error
+          headers:
+            x-jws-signature:
+              type: string
+              description: Header containing a detached JWS signature of the body of the payload.
+            x-fapi-interaction-id:
+              type: string
+              description: An RFC4122 UID used as a correlation id.
+          schema:
+            $ref: '#/definitions/ResponseCommonError'
+      x-version: '1'
+
+
+
+
+definitions:
+  ResponseCommonError:
+    type: object
+    required:
+      - Error
+    properties:
+      Error:
+        $ref: '#/definitions/Error'
+  Error:
+    type: object
+    required:
+      - Status
+      - Code
+    properties:
+      Status:
+        type: string
+        description: Represents the HTTP Status Code
+      Code:
+        type: string
+        description: Represents the HTTP Status Code description
+      Title:
+        type: string
+        description: 'Represents the HTTP Status Code obtained from the provider system, concatenated with its description'
+      DeveloperMessage:
+        type: string
+        description: Represents any other error description complementary message
+      Sources:
+        $ref: '#/definitions/Source'
+  Source:
+    type: object
+    properties:
+      Paramet:
+        type: string
+        description: 'Identify the name of the parameter that produced the error, if the data were available'
+  ConsentStatusRequest:
+    type: object
+    required:
+      - ModificationDate
+      - Status
+    properties:
+      Status:
+        type: string
+        description: 'States that represent the stages of consent associated with the approval and rejection of the banks client for access to their information. Possible values are Authorized, Rejected, Revoked. The Authorized and Rejected status is intended to be states provided by the banks client upon approval or rejection of consent on a given permit. The Revoked state will be a state managed by the bank for particular situations where it is decided to disable a given consent.'
+        enum:
+          - Authorized
+          - Rejected
+          - Revoked
+          - Pending
+          - Expired
+      ModificationDate:
+        type: string
+        format: date-time
+        description: Character string in date time format ISO8601 representing the date and time of modification of consent.
+      Scope:
+        type: string
+        description: Journey Name (Product)
+      ClientType:
+        description: Type of the client
+        type: string
+        enum:
+          - Personal
+          - Business
+          - SME
+      CustomerId:
+        type: string
+        description: Unique and unrepeatable identifier for customer. RUT
+      CustomerCompanyId:
+        type: string
+        description: Unique and unrepeatable identifier for customer company. RUT
+      Reason:
+        type: string
+        description: Change Reason
+      ChangeAuthor:
+        type: string
+        description: Responsible for the change
+        
+
+  ConsentRequest:
+    type: object
+    required:
+      - RequestId
+      - ConsumerId
+    properties:
+      Scope:
+        type: string
+        description: Journey Name (Product)
+      ClientType:
+        description: Type of the client
+        type: string
+        enum:
+          - Personal
+          - Business
+          - SME
+      CustomerId:
+        type: string
+        description: Unique and unrepeatable identifier for customer. RUT
+      CustomerCompanyId:
+        type: string
+        description: Unique and unrepeatable identifier for customer company. RUT
+      PartnerId:
+        description: Identifies de TTP App by de api key
+        type: string
+      PartnerName:
+        description: Partnert Name
+        type: string
+
+  ConsentRsp:
+    type: object
+    properties:
+      Data:
+        $ref: '#/definitions/Consent'
+      Links:
+        $ref: '#/definitions/Links'
+      Meta:
+        $ref: '#/definitions/Meta'
+    required:
+      - Data
+      - Links
+      - Meta
+
+  ConsentsRsp:
+    type: object
+    properties:
+      Data:
+        type: object
+        properties:
+          Consents:
+            type: array
+            items:
+              $ref: '#/definitions/Consent'
+
+      Links:
+        $ref: '#/definitions/Links'
+      Meta:
+        $ref: '#/definitions/Meta'
+    required:
+      - Data
+      - Links
+      - Meta
+
+  ConsentsRequest:
+    type: object
+    required:
+      - RequestId
+      - ConsumerId
+    properties:
+      Scope:
+        type: string
+        description: Journey Name (Product)
+      ClientType:
+        description: Type of the client
+        type: string
+        enum:
+          - Personal
+          - Business
+          - SME
+      CustomerId:
+        type: string
+        description: Unique and unrepeatable identifier for customer. RUT
+      CustomerCompanyId:
+        type: string
+        description: Unique and unrepeatable identifier for customer company. RUT
+      PartnerId:
+        description: Identifies de TTP App by de api key
+        type: string
+      PartnerName:
+        description: Partnert Name
+        type: string
+      Status:
+        type: string
+        description: 'States that represent the stages of consent associated with the approval and rejection of the banks client for access to their information. Possible values are Authorized, Rejected, Revoked. The Authorized and Rejected status is intended to be states provided by the banks client upon approval or rejection of consent on a given permit. The Revoked state will be a state managed by the bank for particular situations where it is decided to disable a given consent.'
+        enum:
+          - Authorized
+          - Rejected
+          - Revoked
+          - Pending
+          - Expired
+
+  ProductParametersReq:
+    required:
+      - Scope
+      - ClientType
+      - CustomerId
+      - PartnerId
+      - PartnerName
+    type: object
+    properties:
+      Scope:
+        type: string
+        description: Journey Name (Product)
+      ClientType:
+        description: Type of the client
+        type: string
+        enum:
+          - Personal
+          - Business
+          - SME
+      CustomerId:
+        type: string
+        description: 'Number identification of a person (RUT). Complete Format 99999999-K'
+      CustomerCompanyId:
+        type: string
+        description: 'Number identification of a Company  (RUT)  Complete Format 99999999-K'
+      PartnerId:
+        type: string
+        description: credentials delivered to the client
+      PartnerName:
+        type: string
+        description: Client name
+      TradeMark:
+        type: string
+        enum: ["BCI", "MACH", "SSFF"]
+      informacionBrower:
+        type: string
+      PartnerConfigId:
+        type: string
+
+  ProductParametersRsp:
+    type: object
+    properties:
+      Data:
+        $ref: '#/definitions/ParameterData'
+      Links:
+        $ref: '#/definitions/Links'
+      Meta:
+        $ref: '#/definitions/Meta'
+    required:
+      - Data
+      - Links
+      - Meta
+
+  ParameterData:
+    type: object
+    properties:
+      Scope:
+        type: string
+        description: Journey Name (Product)
+      ClientType:
+        description: Type of the client
+        type: string
+        enum:
+          - Personal
+          - Business
+          - SME
+      OTPRequired:
+        type: boolean
+      DataConsent:
+        type: array
+        items:
+          $ref: '#/definitions/ConsentInfoItem'
+
+      Authorizations:
+        type: array
+        items:
+          $ref: '#/definitions/AuthorizationsItemData'
+      SearchPeriod:
+        $ref: '#/definitions/SearchPeriodData'
+      Recurrence:
+        $ref: '#/definitions/RecurrenceData'
+      Validity:
+        $ref: '#/definitions/Validity'
+      FintechName:
+        type: string
+      TraceId:
+        type: string
+      Consent:
+        $ref: '#/definitions/Consent'
+
+  AuthorizationsItemData:
+    type: object
+    properties:
+      Order:
+        type: number
+      TextData:
+        type: string
+      LinkData:
+        type: string
+
+
+  Consent:
+    type: object
+    properties:
+      uuid:
+        type: string
+        maxLength: 36
+        description: Standard identifier code
+
+      CustomerId:
+        type: string
+        description: Unique and unrepeatable identifier for customer. RUT
+      CustomerCompanyId:
+        type: string
+        description: Unique and unrepeatable identifier for customer company. RUT
+      PartnerId:
+        description: Identifies de TTP App by de api key
+        type: string
+      PartnerName:
+        description: Partnert Name
+        type: string
+      ClientType:
+        description: Type of the client
+        type: string
+        enum:
+          - Personal
+          - Business
+          - SME
+      Audit:
+        $ref: '#/definitions/AuditInfo'
+      Scope:
+        type: string
+        description: Journey Name (Product)
+      FintechName:
+        type: string
+      Status:
+        type: string
+        description: 'States that represent the stages of consent associated with the approval and rejection of the banks client for access to their information. Possible values are Authorized, Rejected, Revoked. The Authorized and Rejected status is intended to be states provided by the banks client upon approval or rejection of consent on a given permit. The Revoked state will be a state managed by the bank for particular situations where it is decided to disable a given consent.'
+        enum:
+          - Authorized
+          - Rejected
+          - Revoked
+          - Pending
+          - Expired
+          - Cancelled
+      Channel:
+        type: string
+      SearchPeriod:
+        $ref: '#/definitions/SearchPeriodData'
+      Recurrence:
+        $ref: '#/definitions/RecurrenceData'
+      Validity:
+        $ref: '#/definitions/Validity'
+      Ran207Consent:
+        type: boolean
+      CredentialAsignement:
+        type: boolean
+      PartnerConfigId:
+        type: string
+
+
+  AuditInfo:
+    type: object
+    properties:
+      CreationDate:
+        type: string
+        format: date-time
+        description: Character string in date time format ISO8601 representing the date and time of creation of consent.
+      ModificationDate:
+        type: string
+        format: date-time
+        description: Character string in date time format ISO8601 representing the date and time of modification of consent.
+      ExpiryDate:
+        type: string
+        format: date-time
+        description: Character string in date time format ISO8601 representing the date and time of expiration of consent.
+      BrowserInfo:
+        type: string
+        description: Character string with information collected
+      AuthorizationTime:
+        type: string
+        format: date-time
+        description: 'Character string in date time format ISO8601 representing the date and time at which the consent is approved by the client, for audit purposes.'
+      HistoricalModification:
+        $ref: '#/definitions/HistoricalModificationData'
+
+  HistoricalModificationData:
+    type: array
+    items:
+      $ref: '#/definitions/HistoricalModificationDataItems'
+    
+  HistoricalModificationDataItems:
+    type: object
+    properties:
+      Status:
+        type: string
+        description: 'States that represent the stages of consent associated with the approval and rejection of the banks client for access to their information. Possible values are Authorized, Rejected, Revoked. The Authorized and Rejected status is intended to be states provided by the banks client upon approval or rejection of consent on a given permit. The Revoked state will be a state managed by the bank for particular situations where it is decided to disable a given consent.'
+        enum:
+          - Authorized
+          - Rejected
+          - Revoked
+          - Pending
+          - Expired
+          - Cancelled
+      Date:
+        type: string
+        format: date-time
+        description: Character string in date time format ISO8601 representing the date and time of modification of consent.
+      Reason:
+        type: string
+        description: Change Reason
+      ChangeAuthor:
+        type: string
+        description: Responsible for the change
+  
+  SearchPeriodData:
+    type: object
+    properties:
+      Enabled:
+        type: boolean
+      Since:
+        type: string
+        format: date-time
+      Until:
+        type: string
+        format: date-time
+      NumberOfRecords:
+        type: number
+      Duration:
+        type: string
+
+
+
+  RecurrenceData:
+    type: object
+    properties:
+      Enabled:
+        type: boolean
+      Cycle:
+        type: string
+      Since:
+        type: string
+        format: date-time
+      Until:
+        type: string
+        format: date-time
+
+
+  Validity:
+    type: object
+    properties:
+      Duration:
+        type: string
+      Since:
+        type: string
+        format: date-time
+      Until:
+        type: string
+        format: date-time
+
+
+  ConsentInfoItem:
+    type: object
+    properties:
+      Title:
+        type: string
+      ScopeInfo:
+        type: array
+        items:
+          $ref: '#/definitions/ScopeInfoItem'
+
+
+  ScopeInfoItem:
+    type: object
+    properties:
+      Order:
+        type: number
+      DetailedData:
+        type: string
+
+  Links:
+    type: object
+    description: Links relevant to the payload
+    properties:
+      self:
+        type: string
+        format: uri
+    additionalProperties: false
+    required:
+      - self
+  Meta:
+    title: Meta Data
+    type: object
+    description: Meta Data relevant to the payload
+    properties:
+      total-pages:
+        type: integer
+        format: int32
+    additionalProperties: false
+api-consents-Spec_v2.yaml
+Mostrando api-consents-Spec_v2.yaml.
